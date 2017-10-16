@@ -2,11 +2,12 @@ import chemkin
 
 def test_xmlErrors():
 	try:
-		chemkin.DataParser().parse_file('rxns.xml')
-		chemkin.DataParser().parse_file('test_parse.xml')
+		chemkin.DataParser().parse_file('data/rxns.xml')
+		chemkin.DataParser().parse_file('data/test_parse.xml')
 	except Exception as err:
 		assert(type(err)==Exception)
 
 def test_zerocoeff():
 	try:
-		chemkin.DataParser().parse_file('rxns.xml')
+		reactionData = chemikin.DataParser().parse_file("data/rxns.xml")
+		reactionData
