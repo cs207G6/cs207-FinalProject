@@ -59,16 +59,16 @@ def test_idCollision():
 		assert(True)
 
 def test_progRateWrongDimension():
-    cd = chemkin.DataParser().parse_file('data/rxns.xml')
+	cd = chemkin.DataParser().parse_file('data/rxns.xml')
 	try:
-        cd.get_progress_rate([1,2,3,4,5],100)
+		cd.get_progress_rate([1,2,3,4,5],100)
 		assert(False)
 	except Exception as err:
 		assert(True)
         
 def test_progRateWrongSp():
 	try:
-        chemkin.DataParser().parse_file('data/test_wrongSp.xml')
+		chemkin.DataParser().parse_file('data/test_wrongSp.xml')
 		assert(False)
 	except Exception as err:
 		assert(True)
