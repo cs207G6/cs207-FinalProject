@@ -73,3 +73,28 @@ def test_progRateWrongSp():
 	except Exception as err:
 		assert(True)
         
+
+def test_progRateWrongSp2():
+	try:
+		chemkin.DataParser().parse_file('data/test_wrongSp2.xml')
+		assert(False)
+	except Exception as err:
+		assert(True)
+        
+
+def test_progRateNonIrr():
+	cd = chemkin.DataParser().parse_file('data/test_nonirr.xml')
+	try:
+		cd.get_progress_rate([1,2,3,4,5,6],100)
+		assert(False)
+	except Exception as err:
+		assert(True)
+        
+def test_progRateNonEle():
+	cd = chemkin.DataParser().parse_file('data/test_nonele.xml')
+	try:
+		cd.get_progress_rate([1,2,3,4,5,6],100)
+		assert(False)
+	except Exception as err:
+		assert(True)
+        
