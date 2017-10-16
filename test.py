@@ -2,11 +2,36 @@ import chemkin
 
 def test_xmlErrors():
 	try:
-		chemkin.DataParser().parse_file('rxns.xml')
-		chemkin.DataParser().parse_file('test_parse.xml')
+		chemkin.DataParser().parse_file('data/test_parse.xml') # no phase labels
+		assert(False)
 	except Exception as err:
 		assert(type(err)==Exception)
 
-def test_zerocoeff():
+def test_negA():
 	try:
-		chemkin.DataParser().parse_file('rxns.xml')
+		chemikin.DataParser().parse_file("data/test_negA.xml")
+		assert(False)
+	except Exception as err:
+		assert(type(err)==Exception)
+
+def test_btype():
+	try:
+		chemikin.DataParser().parse_file("data/test_btype.xml")
+		assert(False)
+	except Exception as err:
+		assert(type(err)==Exception)
+
+def test_negk():
+	try:
+		chemikin.DataParser().parse_file("data/test_negk.xml")
+		assert(False)
+	except Exception as err:
+		assert(type(err)==Exception)
+
+def test_errorChem():
+	try:
+		chemikin.DataParser().parse_file("data/test_errorChem.xml")
+		assert(False)
+	except Exception as err:
+		assert(type(err)==Exception)
+
