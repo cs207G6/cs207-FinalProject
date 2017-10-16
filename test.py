@@ -35,3 +35,9 @@ def test_errorChem():
 	except Exception as err:
 		assert(type(err)==Exception)
 
+def test_oneMoreReaction():
+	try:
+		chemikin.DataParser().parse_file("data/test_oneMoreReaction.xml")
+	except Exception as err:
+		assert(False)
+
