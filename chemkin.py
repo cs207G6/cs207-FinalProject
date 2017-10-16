@@ -1,5 +1,20 @@
 import numpy as np
 class ReactionData():
+    '''
+    Contains all the data related to the reaction; i.e reaction & progress rate
+    
+     ARGUMENTS:
+     ==========
+     id = identifier in xml
+     species = reactants & product
+     reactions: an array of the reactions
+     
+     ATTRIBUTES:
+     ===========
+      id = identifier in xml
+      species = reactants & product
+      reactions: an array of the reactions
+    '''
     def __init__(self, id, species, reactions):
         self.id = id
         self.reactions = reactions
