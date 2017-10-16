@@ -30,6 +30,8 @@ class ReactionData():
                 if k not in species_set:
                     raise ValueError("{} is not in species array.".format(k))
         
+    def __len__(self):
+        return self.reactions,self.species
     def get_nu(self):
         inv_dict = {v:k for (k,v) in enumerate(self.species)}
         nu_react = np.zeros((self.I, self.J))
@@ -134,11 +136,39 @@ class RateCoeff():
         raise NotImplementedError()
 
 class ModifiedArrhenius(RateCoeff):
+    '''
+    Caculate the rate coeffcient for Modified Arrhenius Function
+    
+    ARGUMENTS:
+    ==========
+    b = modified arrhenius prefactor
+        float
+    a = arrhenius prefactor
+        must be positive float
+    E =  activation energy
+        float
+    R = ideal gas constant (optional; default 8.314)
+        must be positive
+     
+    ATTRIBUTES:
+    ===========
+    b = modified arrhenius prefactor
+        float
+    a = arrhenius prefactor
+        must be positive float
+    E =  activation energy
+        float
+    R = ideal gas constant (optional; default 8.314)
+        must be positive
+    '''
     def __init__(self, a, b, E, R = 8.314):
         self.b = b
         self.A = a
         self.E = E
         self.R = R
+    
+    def __repr__(self):
+         return "a = {}, b = {}, E = {}, R = {}".format(self.A, self.b,self.E,self.R)
     
     def get_K(self, T):
         """Calculates the modified Arrhenius reaction rate coefficient
