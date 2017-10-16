@@ -54,6 +54,7 @@ def test_length():
 def test_idCollision():
 	try:
 		chemkin.DataParser().parse_file("data/test_idCollision.xml")
-	except Exception as err:
 		assert(False)
+	except Exception as err:
+		assert(True)
         
