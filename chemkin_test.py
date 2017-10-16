@@ -5,7 +5,7 @@ def test_xmlErrors():
 		chemkin.DataParser().parse_file('data/test_parse.xml') # no phase labels
 		assert(False)
 	except Exception as err:
-		assert(type(err)==Exception)
+		assert(True)
 
 def test_negA():
 	try:
