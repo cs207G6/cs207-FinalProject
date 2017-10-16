@@ -277,7 +277,7 @@ class Arrhenius(RateCoeff):
         return self.A * np.exp(-self.E / self.R / T)
     
 class Constant(RateCoeff):
-     '''
+    '''
     Caculate the rate coeffcient for Modified Arrhenius Reaction
     
     ARGUMENTS:
