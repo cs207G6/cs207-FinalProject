@@ -56,9 +56,9 @@ class ReactionData():
                 raise NotImplementedError("Progress rate for {} reactions is not supported.",format(r.type))
         return self.__progress_rate(self.get_nu()[0], np.array(concs), self.get_k(T))
     
-    def get_reaction_rate(self, reaction_rates):
+    def get_reaction_rate(self, progress_rates):
         nu_react, nu_prod = self.get_nu()
-        return self.__reaction_rate(nu_react, nu_prod, reaction_rates)
+        return self.__reaction_rate(nu_react, nu_prod, progress_rates)
     
     def __progress_rate(self, nu_react, concs, k):
         """Returns the progress rate of a system of irreversible, elementary reactions
@@ -78,11 +78,6 @@ class ReactionData():
         omega: numpy array of floats
                size: num_reactions
                progress rate of each reaction
-
-        EXAMPLES:
-        =========
-        >>> progress_rate_2(np.array([[2.0, 1.0], [1.0, 0.0], [0.0, 1.0]]), np.array([2.0, 1.0, 1.0]), 10.0)
-        array([ 40.,  20.])
         """
         progress = k # Initialize progress rates with reaction rate coefficients
         for jdx, rj in enumerate(progress):
@@ -119,14 +114,6 @@ class ReactionData():
         f: numpy array of floats
            size: num_species
            reaction rate of each specie
-
-        EXAMPLES:
-        =========
-        >>> nu_react = np.array([[1.0, 0.0], [2.0, 0.0], [0.0, 2.0]])
-        >>> nu_prod = np.array([[0.0, 1.0], [0.0, 2.0], [1.0, 0.0]])
-        >>> r = np.array([ 40.,  20.])
-        >>> reaction_rate(nu_react, nu_prod, r)
-        array([-20., -40.,   0.])
         """
         nu = nu_prod - nu_react
         return np.dot(nu, rj)
