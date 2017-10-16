@@ -50,3 +50,10 @@ def test_oneMoreReaction():
 
 def test_length():
     assert(len(chemkin.DataParser().parse_file('data/rxns.xml'))==(6,3))
+
+def test_idCollision():
+	try:
+		chemkin.DataParser().parse_file("data/test_idCollision.xml")
+	except Exception as err:
+		assert(False)
+        
