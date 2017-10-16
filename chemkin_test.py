@@ -48,3 +48,5 @@ def test_oneMoreReaction():
 	except Exception as err:
 		assert(False)
 
+def test_length():
+    assert(len(chemkin.DataParser().parse_file('data/rxns.xml'))==(6,3))
