@@ -21,6 +21,13 @@ def test_btype():
 	except Exception as err:
 		assert(type(err)==Exception)
 
+def test_Atype():
+	try:
+		chemikin.DataParser().parse_file("data/test_Atype.xml")
+		assert(False)
+	except Exception as err:
+		assert(type(err)==Exception)
+
 def test_negk():
 	try:
 		chemikin.DataParser().parse_file("data/test_negk.xml")

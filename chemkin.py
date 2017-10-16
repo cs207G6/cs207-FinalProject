@@ -1,14 +1,41 @@
 import numpy as np
 class ReactionData():
+    '''
+    Contains all the data related to the reaction; i.e reaction & progress rate
+    
+     ARGUMENTS:
+     ==========
+     id = identifier in xml
+     species = reactants & product
+     reactions: an array of the reactions
+     
+     ATTRIBUTES:
+     ===========
+      id = identifier in xml
+      species = reactants & product
+      reactions: an array of the reactions
+    '''
     def __init__(self, id, species, reactions):
         self.id = id
         self.reactions = reactions
         self.species = species
+        self.I = len(self.species)
+        self.J = len(self.reactions)
+        species_set = set(self.species)
+        for r in self.reactions:
+            for k in r.reactants:
+                if k not in species_set:
+                    raise ValueError("{} is not in species array.".format(k))
+            for k in r.products:
+                if k not in species_set:
+                    raise ValueError("{} is not in species array.".format(k))
         
+    def __len__(self):
+        return self.reactions,self.species
     def get_nu(self):
         inv_dict = {v:k for (k,v) in enumerate(self.species)}
-        nu_react = np.zeros((len(self.species),len(self.reactions)))
-        nu_prod = np.zeros((len(self.species),len(self.reactions)))
+        nu_react = np.zeros((self.I, self.J))
+        nu_prod = np.zeros((self.I, self.J))
         for (j,reaction) in enumerate(self.reactions):
             for reactant in reaction.reactants:
                 nu_react[inv_dict[reactant],j]=reaction.reactants[reactant]
@@ -20,7 +47,14 @@ class ReactionData():
         return np.array([reaction.rate_coeff.get_K(T) for reaction in self.reactions])
     
     def get_progress_rate(self, concs, T):
-        return self.__progress_rate(self.get_nu()[0], concs, self.get_k(T))
+        if len(concs) != self.I:
+            raise ValueError("concs must be a list of concentrations of size {}".format(self.I))
+        for r in self.reactions:
+            if r.reversible:
+                raise NotImplementedError("Progress rate for reversible reactions is not supported.")
+            if r.type != "Elementary":
+                raise NotImplementedError("Progress rate for {} reactions is not supported.",format(r.type))
+        return self.__progress_rate(self.get_nu()[0], np.array(concs), self.get_k(T))
     
     def get_reaction_rate(self, reaction_rates):
         nu_react, nu_prod = self.get_nu()
@@ -102,11 +136,39 @@ class RateCoeff():
         raise NotImplementedError()
 
 class ModifiedArrhenius(RateCoeff):
+    '''
+    Caculate the rate coeffcient for Modified Arrhenius Function
+    
+    ARGUMENTS:
+    ==========
+    b = modified arrhenius prefactor
+        float
+    a = arrhenius prefactor
+        must be positive float
+    E =  activation energy
+        float
+    R = ideal gas constant (optional; default 8.314)
+        must be positive
+     
+    ATTRIBUTES:
+    ===========
+    b = modified arrhenius prefactor
+        float
+    a = arrhenius prefactor
+        must be positive float
+    E =  activation energy
+        float
+    R = ideal gas constant (optional; default 8.314)
+        must be positive
+    '''
     def __init__(self, a, b, E, R = 8.314):
         self.b = b
         self.A = a
         self.E = E
         self.R = R
+    
+    def __repr__(self):
+         return "a = {}, b = {}, E = {}, R = {}".format(self.A, self.b,self.E,self.R)
     
     def get_K(self, T):
         """Calculates the modified Arrhenius reaction rate coefficient
@@ -238,17 +300,21 @@ class DataParser():
         if root.tag == "Arrhenius":
             A = float(root.find('A').text)
             E = float(root.find('E').text)
+            if root.find('R') is not None:
+                return Arrhenius(a=A, E=E, R=float(R.text))
             return Arrhenius(a=A, E=E)
         elif root.tag == "modifiedArrhenius":
             A = float(root.find('A').text)
             b = float(root.find('b').text)
             E = float(root.find('E').text)
+            if root.find('R') is not None:
+                return ModifiedArrhenius(a=A, b=b, E=E, R=float(R.text))
             return ModifiedArrhenius(a=A, b=b, E=E)
         elif root.tag == "Constant":
             k = float(root.find('k').text)
             return Constant(k)
         else:
-            raise ValueError("[TODO]")
+            raise NotImplementedError("{} rate coefficient is not supported".format(root.tag))
     
     def _get_bool(self, v):
         v = str(v).lower()

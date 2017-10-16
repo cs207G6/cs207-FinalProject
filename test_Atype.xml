@@ -13,7 +13,7 @@
             <equation>H + O2 =] OH + O</equation>
             <rateCoeff>
                 <Arrhenius>
-                    <A>3.52e+10</A>
+                    <A>"hi"</A>    <!-- A is a string -->
                     <E>7.14e+04</E>
                 </Arrhenius>
             </rateCoeff>
@@ -26,8 +26,8 @@
             <equation>H2 + O =] OH + H</equation>
             <rateCoeff>
                 <modifiedArrhenius>
-                    <A>5.06e-2</A>
-                    <b>"hello"</b> <!-- string b-->
+                    <A>"hi"</A>      <!-- A is a string -->
+                    <b>2.7</b>
                     <E>2.63e+04</E>
                 </modifiedArrhenius>
             </rateCoeff>
