@@ -9,42 +9,42 @@ def test_xmlErrors():
 
 def test_negA():
 	try:
-		chemikin.DataParser().parse_file("data/test_negA.xml")
+		chemkin.DataParser().parse_file("data/test_negA.xml")
 		assert(False)
 	except Exception as err:
-		assert(type(err)==Exception)
+		assert(True)
 
 def test_btype():
 	try:
-		chemikin.DataParser().parse_file("data/test_btype.xml")
+		chemkin.DataParser().parse_file("data/test_btype.xml")
 		assert(False)
 	except Exception as err:
-		assert(type(err)==Exception)
+		assert(True)
 
 def test_Atype():
 	try:
-		chemikin.DataParser().parse_file("data/test_Atype.xml")
+		chemkin.DataParser().parse_file("data/test_Atype.xml")
 		assert(False)
 	except Exception as err:
-		assert(type(err)==Exception)
+		assert(True)
 
 def test_negk():
 	try:
-		chemikin.DataParser().parse_file("data/test_negk.xml")
+		chemkin.DataParser().parse_file("data/test_negk.xml")
 		assert(False)
 	except Exception as err:
-		assert(type(err)==Exception)
+		assert(True)
 
 def test_errorChem():
 	try:
-		chemikin.DataParser().parse_file("data/test_errorChem.xml")
+		chemkin.DataParser().parse_file("data/test_errorChem.xml")
 		assert(False)
 	except Exception as err:
-		assert(type(err)==Exception)
+		assert(True)
 
 def test_oneMoreReaction():
 	try:
-		chemikin.DataParser().parse_file("data/test_oneMoreReaction.xml")
+		chemkin.DataParser().parse_file("data/test_oneMoreReaction.xml")
 	except Exception as err:
 		assert(False)
 
