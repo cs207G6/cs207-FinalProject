@@ -48,3 +48,8 @@ def test_oneMoreReaction():
 	except Exception as err:
 		assert(False)
 
+def test_idCollision():
+	try:
+		chemkin.DataParser().parse_file("data/test_idCollision.xml")
+	except Exception as err:
+		assert(False)
