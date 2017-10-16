@@ -180,11 +180,6 @@ class ModifiedArrhenius(RateCoeff):
         ========
         k: float
            Modified Arrhenius reaction rate coefficient
-
-        EXAMPLES:
-        =========
-        >>> k_mod_arr(2.0, -0.5, 3.0, 100.0)
-        0.19927962618542916
         """
         if self.A < 0.0:
             raise ValueError("A = {0:18.16e}:  Negative Arrhenius prefactor is prohibited!".format(self.A))
@@ -245,11 +240,6 @@ class Arrhenius(RateCoeff):
         ========
         k: float
            Arrhenius reaction rate coefficient
-
-        EXAMPLES:
-        =========
-        >>> k_arr(2.0, 3.0, 100.0)
-        1.9927962618542914
         """
 
         if self.A < 0.0:
@@ -295,11 +285,6 @@ class Constant(RateCoeff):
         ========
         k: float
            Constant reaction rate coefficient
-
-        EXAMPLES:
-        =========
-        >>> k_const(5.0)
-        5.0
         """
         if self.k < 0:
             raise ValueError("Negative reaction rate coefficients are prohibited.")
