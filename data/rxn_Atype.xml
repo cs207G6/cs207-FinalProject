@@ -27,7 +27,7 @@
             <rateCoeff>
                 <modifiedArrhenius>
                     <A>5.06e-2</A>
-                    <b>"hello"</b> <!-- string b-->
+                    <b>2.7</b>
                     <E>2.63e+04</E>
                 </modifiedArrhenius>
             </rateCoeff>
