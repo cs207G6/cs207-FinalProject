@@ -28,3 +28,10 @@ def test_negk():
 	except Exception as err:
 		assert(type(err)==Exception)
 
+def test_errorChem():
+	try:
+		chemikin.DataParser().parse_file("data/test_errorChem.xml")
+		assert(False)
+	except Exception as err:
+		assert(type(err)==Exception)
+
