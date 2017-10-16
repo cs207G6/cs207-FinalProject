@@ -22,13 +22,18 @@ class ReactionData():
         self.I = len(self.species)
         self.J = len(self.reactions)
         species_set = set(self.species)
+        ids = set()
         for r in self.reactions:
+            if r.id in ids:
+                raise ValueError("Duplicate id: {}".format(r.id))
+            ids.add(r.id)
             for k in r.reactants:
                 if k not in species_set:
                     raise ValueError("{} is not in species array.".format(k))
             for k in r.products:
                 if k not in species_set:
                     raise ValueError("{} is not in species array.".format(k))
+        
         
     def __len__(self):
         return self.reactions,self.species
