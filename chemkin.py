@@ -34,9 +34,9 @@ class ReactionData():
                 if k not in species_set:
                     raise ValueError("{} is not in species array.".format(k))
         
-        
     def __len__(self):
-        return self.reactions,self.species
+        return self.J
+    
     def get_nu(self):
         inv_dict = {v:k for (k,v) in enumerate(self.species)}
         nu_react = np.zeros((self.I, self.J))
