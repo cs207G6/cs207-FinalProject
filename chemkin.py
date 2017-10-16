@@ -11,9 +11,9 @@ class ReactionData():
      
      ATTRIBUTES:
      ===========
-      id = identifier in xml
-      species = reactants & product
-      reactions: an array of the reactions
+     id = identifier in xml
+     species = reactants & product
+     reactions: an array of the reactions
     '''
     def __init__(self, id, species, reactions):
         self.id = id
@@ -137,7 +137,7 @@ class RateCoeff():
 
 class ModifiedArrhenius(RateCoeff):
     '''
-    Caculate the rate coeffcient for Modified Arrhenius Function
+    Caculate the rate coeffcient for Modified Arrhenius Reaction
     
     ARGUMENTS:
     ==========
@@ -211,6 +211,27 @@ class ModifiedArrhenius(RateCoeff):
         return self.A * T**self.b * np.exp(-self.E / self.R / T)
     
 class Arrhenius(RateCoeff):
+    '''
+    Caculate the rate coeffcient for Arrhenius Reaction
+    
+    ARGUMENTS:
+    ==========
+    a = arrhenius prefactor
+        must be positive float
+    E =  activation energy
+        float
+    R = ideal gas constant (optional; default 8.314)
+        must be positive
+     
+    ATTRIBUTES:
+    ===========
+    a = arrhenius prefactor
+        must be positive float
+    E =  activation energy
+        float
+    R = ideal gas constant (optional; default 8.314)
+        must be positive
+    '''
     def __init__(self, a, E,R=8.314):
         self.A = a
         self.E = E
@@ -256,6 +277,22 @@ class Arrhenius(RateCoeff):
         return self.A * np.exp(-self.E / self.R / T)
     
 class Constant(RateCoeff):
+     '''
+    Caculate the rate coeffcient for Modified Arrhenius Reaction
+    
+    ARGUMENTS:
+    ==========
+    k = constant rate coeffcient 
+        float
+        must be positive
+ 
+     
+    ATTRIBUTES:
+    ===========
+    k = constant rate coeffcient 
+        float
+        must be positive
+    '''
     def __init__(self, const):
         self.k = const
     

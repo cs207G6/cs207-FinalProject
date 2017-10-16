@@ -2,12 +2,11 @@
 
 <ctml>
 
-    <!--
     <phase>
         <speciesArray> H O OH H2 H2O O2 </speciesArray>
     </phase>
 
-    <reactionData id="test_mechanism"> -->
+    <reactionData id="test_mechanism">
 
         <!-- reaction 01  -->
         <reaction reversible="no" type="Elementary" id="reaction01">
@@ -46,6 +45,19 @@
             </rateCoeff>
             <reactants>H2:1 OH:1</reactants>
             <products>H2O:1 H:1</products>
+        </reaction>
+
+        <!-- reaction 04 -->
+        <reaction reversible="no" type="Elementary" id="reaction04">
+            <equation>O + OH =] H2 + O2</equation>
+            <rateCoeff>
+                <Arrhenius>
+                    <A>3.14e+9</A>
+                    <E>1.12e+05</E>
+                </Arrhenius>
+            </rateCoeff>
+            <reactants>O:2 OH:2</reactants>
+            <products>H2:1 O2:2</products>
         </reaction>
 
     </reactionData>
