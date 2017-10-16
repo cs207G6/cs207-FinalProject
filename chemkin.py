@@ -35,7 +35,7 @@ class ReactionData():
                     raise ValueError("{} is not in species array.".format(k))
         
     def __len__(self):
-        return (self.I,self.J)
+        return self.J
     
     def get_nu(self):
         inv_dict = {v:k for (k,v) in enumerate(self.species)}

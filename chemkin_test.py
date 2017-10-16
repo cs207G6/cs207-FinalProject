@@ -49,7 +49,7 @@ def test_oneMoreReaction():
 		assert(False)
 
 def test_length():
-    assert(len(chemkin.DataParser().parse_file('data/rxns.xml'))==(6,3))
+    assert(len(chemkin.DataParser().parse_file('data/rxns.xml'))==3)
 
 def test_idCollision():
 	try:
