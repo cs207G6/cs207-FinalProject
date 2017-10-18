@@ -52,6 +52,29 @@ class ReactionData():
         return np.array([reaction.rate_coeff.get_K(T) for reaction in self.reactions])
     
     def get_progress_rate(self, concs, T):
+        """Returns the progress rate of a system of irreversible, elementary reactions
+
+        INPUTS:
+        =======
+        concs:    numpy array of floats 
+                  concentration of species
+        T:        numpy array of floats 
+                  temperature
+
+        RETURNS:
+        ========
+        omega: numpy array of floats
+               size: num_reactions
+               progress rate of each reaction
+        
+        EXAMPLES:
+        ========
+        >>> data_parser = DataParser()
+        >>> reaction_data = data_parser.parse_file("data/rxns.xml")
+        >>> progress_rates = reaction_data.get_progress_rate([1,2,3,4,5,6],100)
+        >>> print(progress_rates)
+        [  1.06613928e-26   1.85794997e-09   1.20000000e+04]
+        """
         if len(concs) != self.I:
             raise ValueError("concs must be a list of concentrations of size {}".format(self.I))
         for r in self.reactions:
@@ -62,6 +85,26 @@ class ReactionData():
         return self.__progress_rate(self.get_nu()[0], np.array(concs), self.get_k(T))
     
     def get_reaction_rate(self, progress_rates):
+        """Returns the reaction rate of a system of irreversible, elementary reactions
+
+        INPUTS:
+        =======
+        progress_rates: numpy array of floats, 
+                  size: num_species X num_reactions
+
+        RETURNS:
+        ========
+        array: reaction rate of each specie
+        
+        EXAMPLES:
+        ========
+        >>> data_parser = DataParser()
+        >>> reaction_data = data_parser.parse_file("data/rxns.xml")
+        >>> progress_rates = reaction_data.get_progress_rate([1,2,3,4,5,6],100)
+        >>> reaction_rates = reaction_data.get_reaction_rate(progress_rates)
+        >>> print(reaction_rates[:4])
+        [  1.20000000e+04  -1.85794997e-09  -1.20000000e+04  -1.20000000e+04]
+        """
         nu_react, nu_prod = self.get_nu()
         return self.__reaction_rate(nu_react, nu_prod, progress_rates)
     
