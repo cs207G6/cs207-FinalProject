@@ -83,6 +83,11 @@ class ReactionData():
         omega: numpy array of floats
                size: num_reactions
                progress rate of each reaction
+
+        EXAMPLES:
+        =========
+        >>> progress_rate_2(np.array([[2.0, 1.0], [1.0, 0.0], [0.0, 1.0]]), np.array([2.0, 1.0, 1.0]), 10.0)
+        array([ 40.,  20.])
         """
         progress = k # Initialize progress rates with reaction rate coefficients
         for jdx, rj in enumerate(progress):
@@ -119,6 +124,14 @@ class ReactionData():
         f: numpy array of floats
            size: num_species
            reaction rate of each specie
+
+        EXAMPLES:
+        =========
+        >>> nu_react = np.array([[1.0, 0.0], [2.0, 0.0], [0.0, 2.0]])
+        >>> nu_prod = np.array([[0.0, 1.0], [0.0, 2.0], [1.0, 0.0]])
+        >>> r = np.array([ 40.,  20.])
+        >>> reaction_rate(nu_react, nu_prod, r)
+        array([-20., -40.,   0.])
         """
         nu = nu_prod - nu_react
         return np.dot(nu, rj)
@@ -185,6 +198,11 @@ class ModifiedArrhenius(RateCoeff):
         ========
         k: float
            Modified Arrhenius reaction rate coefficient
+
+        EXAMPLES:
+        =========
+        >>> k_mod_arr(2.0, -0.5, 3.0, 100.0)
+        0.19927962618542916
         """
         if self.A < 0.0:
             raise ValueError("A = {0:18.16e}:  Negative Arrhenius prefactor is prohibited!".format(self.A))
@@ -245,6 +263,11 @@ class Arrhenius(RateCoeff):
         ========
         k: float
            Arrhenius reaction rate coefficient
+
+        EXAMPLES:
+        =========
+        >>> k_arr(2.0, 3.0, 100.0)
+        1.9927962618542914
         """
 
         if self.A < 0.0:
@@ -290,6 +313,11 @@ class Constant(RateCoeff):
         ========
         k: float
            Constant reaction rate coefficient
+
+        EXAMPLES:
+        =========
+        >>> k_const(5.0)
+        5.0
         """
         if self.k < 0:
             raise ValueError("Negative reaction rate coefficients are prohibited.")
