@@ -578,6 +578,19 @@ class DataParser():
         return ReactionData(id, species, reactions)
     
      def create_db(self,filename):
+            """
+            Parse a reaction xml file and return sql database with 
+
+            Arguments
+            ----------
+            filename: str
+                filename of reaction xml file 
+
+            Return
+            ----------
+            HW10_demo.sqlite
+                database with Nasa coefficient for each species
+            """
             #Import SQLlite
             pd.set_option('display.width', 500)
             pd.set_option('display.max_columns', 100)
@@ -651,3 +664,11 @@ class DataParser():
                               (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
+    def get_coeffs(species_name, temp_range): # from HW10. might be useful
+        if temp_range == 'high':
+            query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM HIGH WHERE SPECIES_NAME="{}"'''.format(species_name)
+        elif temp_range == 'low':
+            query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM LOW WHERE SPECIES_NAME="{}"'''.format(species_name)
+        coeffs_list = cursor.execute(query).fetchall()
+        coeffs = np.asarray(coeffs_list)
+        return coeffs
