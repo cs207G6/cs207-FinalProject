@@ -579,6 +579,7 @@ class DataParser():
             reactions.append(reaction)
         return ReactionData(id, species, reactions)
     
+class NASACoeffs(self,species):   
      def create_db(self,filename):
             """
             Parse a reaction xml file and return sql database with 
@@ -666,7 +667,7 @@ class DataParser():
                               (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
-    def get_coeffs(species_name, temp_range): # from HW10. might be useful
+    def get_coeffs(species_name, temp_range):
         if temp_range == 'high':
             query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM HIGH WHERE SPECIES_NAME="{}"'''.format(species_name)
         elif temp_range == 'low':
