@@ -88,10 +88,12 @@ class ReactionData():
         if len(concs) != self.I:
             raise ValueError("concs must be a list of concentrations of size {}".format(self.I))
         for r in self.reactions:
-            #if r.reversible:
-                #backward = thermochem(rxnset) #???what is rxnset
-                #return self.__progress_rate(self.get_nu()[0], np.array(concs), backward.backward_coeffs(kf,T)) # ???what is kf?
-                raise NotImplementedError("Progress rate for reversible reactions is not supported.")
+            if r.reversible:
+                rxnset = ThermochemRXNSetWrapper(self)
+                backward = thermochem(rxnset) 
+                kf = self.get_k(T)
+                return self.__progress_rate(self.get_nu()[0], np.array(concs), backward.backward_coeffs(kf,T)) # ???what is kf?
+                #raise NotImplementedError("Progress rate for reversible reactions is not supported.")
             if r.type != "Elementary":
                 raise NotImplementedError("Progress rate for {} reactions is not supported.",format(r.type))
         return self.__progress_rate(self.get_nu()[0], np.array(concs), self.get_k(T))
