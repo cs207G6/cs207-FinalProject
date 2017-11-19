@@ -1,8 +1,10 @@
+import numpy as np
 
 
 class RateCoeff():
     def get_K(self, T):
         raise NotImplementedError()
+
 
 class ModifiedArrhenius(RateCoeff):
     '''
@@ -30,15 +32,16 @@ class ModifiedArrhenius(RateCoeff):
     R = ideal gas constant (optional; default 8.314)
         must be positive
     '''
-    def __init__(self, a, b, E, R = 8.314):
+
+    def __init__(self, a, b, E, R=8.314):
         self.b = b
         self.A = a
         self.E = E
         self.R = R
-    
+
     def __repr__(self):
-         return "a = {}, b = {}, E = {}, R = {}".format(self.A, self.b,self.E,self.R)
-    
+        return "a = {}, b = {}, E = {}, R = {}".format(self.A, self.b, self.E, self.R)
+
     def get_K(self, T):
         """Calculates the modified Arrhenius reaction rate coefficient
     
@@ -71,8 +74,9 @@ class ModifiedArrhenius(RateCoeff):
         if self.R < 0.0:
             raise ValueError("R = {0:18.16e}:  Negative ideal gas constant is prohibited!".format(self.R))
 
-        return self.A * T**self.b * np.exp(-self.E / self.R / T)
-    
+        return self.A * T ** self.b * np.exp(-self.E / self.R / T)
+
+
 class Arrhenius(RateCoeff):
     '''
     Caculate the rate coeffcient for Arrhenius Reaction
@@ -95,11 +99,12 @@ class Arrhenius(RateCoeff):
     R = ideal gas constant (optional; default 8.314)
         must be positive
     '''
-    def __init__(self, a, E,R=8.314):
+
+    def __init__(self, a, E, R=8.314):
         self.A = a
         self.E = E
         self.R = R
-    
+
     def get_K(self, T):
         """Calculates the Arrhenius reaction rate coefficient
     
@@ -132,7 +137,8 @@ class Arrhenius(RateCoeff):
             raise ValueError("R = {0:18.16e}:  Negative ideal gas constant is prohibited!".format(self.R))
 
         return self.A * np.exp(-self.E / self.R / T)
-    
+
+
 class Constant(RateCoeff):
     '''
     Caculate the rate coeffcient for Modified Arrhenius Reaction
@@ -150,9 +156,10 @@ class Constant(RateCoeff):
         float
         must be positive
     '''
+
     def __init__(self, const):
         self.k = const
-    
+
     def get_K(self, T):
         """Simply returns a constant reaction rate coefficient
     
@@ -168,4 +175,4 @@ class Constant(RateCoeff):
         if self.k < 0:
             raise ValueError("Negative reaction rate coefficients are prohibited.")
 
-        return self.k 
+        return self.k

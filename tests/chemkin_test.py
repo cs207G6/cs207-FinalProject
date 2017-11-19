@@ -1,5 +1,5 @@
 
-from ..chemkin.parser import DataParser
+from chemkin.parser import DataParser
 from os.path import join
 
 

@@ -1,4 +1,5 @@
 from chemkin.reaction import *
+from chemkin.rate_coeff import *
 
 
 class DataParser:
