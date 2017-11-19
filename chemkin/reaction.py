@@ -1,5 +1,7 @@
 import numpy as np
 
+def __get_example_data_for_doctest(fn):
+    return "chemkin/example_data/"+fn
 
 class RateCoeff:
     def get_K(self, T):
@@ -254,7 +256,7 @@ class ReactionData:
         ========
         >>> from .parser import DataParser
         >>> data_parser = DataParser()
-        >>> reaction_data = data_parser.parse_file("example_data/rxns.xml")
+        >>> reaction_data = data_parser.parse_file(__get_example_data_for_doctest("rxns.xml"))
         >>> progress_rates = reaction_data.get_progress_rate([1,2,3,4,5,6],100)
         >>> print(progress_rates)
         [  1.06613928e-26   1.85794997e-09   1.20000000e+04]
@@ -284,7 +286,7 @@ class ReactionData:
         ========
         >>> from .parser import DataParser
         >>> data_parser = DataParser()
-        >>> reaction_data = data_parser.parse_file("example_data/rxns.xml")
+        >>> reaction_data = data_parser.parse_file(__get_example_data_for_doctest("rxns.xml"))
         >>> progress_rates = reaction_data.get_progress_rate([1,2,3,4,5,6],100)
         >>> reaction_rates = reaction_data.get_reaction_rate(progress_rates)
         >>> print(reaction_rates[:4])

@@ -40,7 +40,8 @@ setup(
     tests_require=['coverage', 'pytest', 'pytest-cov'],
 
     package_data={
-        'example_data': ['example_data/*.xml']
-    }
-
+        '': ['example_data/*.xml']
+    },
+      
+    include_package_data = True
 )

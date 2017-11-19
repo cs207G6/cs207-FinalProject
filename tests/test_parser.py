@@ -3,7 +3,7 @@ from os.path import join
 
 
 def get_example_data_file(file):
-    return join("example_data", file)
+    return join("chemkin/example_data", file)
 
 
 def test_xmlErrors():
