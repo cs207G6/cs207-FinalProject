@@ -140,6 +140,7 @@ def test_RxWtWrongSp():
 	except Exception as err:
 		assert(True)
 
+
 def test_eqtIncst():
 	try:
 		cd = DataParser().parse_file(get_example_data_file('test_eqtIncst.xml'))
@@ -155,3 +156,11 @@ def test_incstReverse():
 		assert(False)
 	except Exception as err:
 		assert(True)
+
+def test_WrongSp_in_array():
+    try:
+        DataParser().parse_file(get_example_data_file('test_WrongSp_in_array.xml'))
+        assert False
+    except Exception:
+        assert True
+
