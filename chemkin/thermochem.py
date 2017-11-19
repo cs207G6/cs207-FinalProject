@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class ThermoChem:
     """Methods for calculating the backward reaction rate.
 
