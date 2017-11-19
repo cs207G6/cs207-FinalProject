@@ -35,8 +35,14 @@ class ReactionData():
         self.species_info = {}
         ids = set()
         for s in self.species:
-            species_info[s]={'l':{},'h':{}}
-            
+            self.species_info[s]={'l':{},'h':{}}
+            nasa = NASACoeffs()
+            self.species_info[s]['l']['Tmax'] = nasa.get_tmax(s,'low')
+            self.species_info[s]['l']['Tmin'] = nasa.get_tmin(s,'low')
+            self.species_info[s]['l']['coeffs'] = nasa.get_coeffs(s,'low')
+            self.species_info[s]['h']['Tmax'] = nasa.get_tmax(s,'high')
+            self.species_info[s]['h']['Tmin'] = nasa.get_tmin(high,'low')
+            self.species_info[s]['h']['coeffs'] = nasa.get_coeffs(s,'high')
             
         for r in self.reactions:
             if r.id in ids:
@@ -674,7 +680,8 @@ class NASACoeffs(self,species):
                               (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
-    def get_coeffs(species_name, temp_range):
+    def 
+    (species_name, temp_range):
         #get list of species
         query = '''SELECT SPECIES_NAME FROM LOW'''
         species_list = cursor.execute(query).fetchall()
