@@ -680,8 +680,7 @@ class NASACoeffs(self,species):
                               (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
-    def 
-    (species_name, temp_range):
+    def get_coeffs(species_name, temp_range):
         #get list of species
         query = '''SELECT SPECIES_NAME FROM LOW'''
         species_list = cursor.execute(query).fetchall()
