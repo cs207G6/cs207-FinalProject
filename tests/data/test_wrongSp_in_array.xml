@@ -31,7 +31,7 @@
                     <E>2.63e+04</E>
                 </modifiedArrhenius>
             </rateCoeff>
-            <reactants>H2:1 C:1</reactants>
+            <reactants>H2:1 O:1</reactants>
             <products>OH:1 H:1</products>
         </reaction>
 

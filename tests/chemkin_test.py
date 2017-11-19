@@ -164,3 +164,19 @@ def test_WrongSp_in_array():
     except Exception:
         assert True
 
+def test_wrong_num_products():
+    try:
+        DataParser().parse_file(get_example_data_file('test_wrong_num_products.xml'))
+        assert False
+    except Exception:
+        assert True
+
+def test_wrong_num_reactants():
+    try:
+        DataParser().parse_file(get_example_data_file('test_wrong_num_reactants.xml'))
+        assert False
+    except Exception:
+        assert True
+
+
+
