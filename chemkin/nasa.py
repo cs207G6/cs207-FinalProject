@@ -3,7 +3,9 @@ import sqlite3
 class NASACoeffs:
     def __init__(self, database_file = None):
         if database_file is None:
-            self.database_file = "default_database"
+            import os
+            path = os.path.dirname(amodule.__file__)
+            self.database_file = os.path.join(path, "database", "default.sqlite")
         else:
             self.database_file = database_file
     
