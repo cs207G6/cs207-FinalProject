@@ -2,6 +2,13 @@ import numpy as np
 import sqlite3
 import numpy as np
 import pandas as pd
+
+class ThermochemRXNSetWrapper:
+    def __init__(self, rxnData:ReactionData):
+        self.nasa7_coeffs = None    # todo
+        nu_r, nu_p = rxnData.get_nu()
+        self.nuij = nu_p - nu_r
+
 class ReactionData():
     '''
     Contains all the data related to the reaction; i.e reaction & progress rate
