@@ -25,14 +25,19 @@ class ReactionData():
      species = reactants & product
      reactions: an array of the reactions
     '''
-    def __init__(self, id, species, reactions):
+    def __init__(self, id, species, reactions, NASACoeffs):
         self.id = id
         self.reactions = reactions
         self.species = species
         self.I = len(self.species)
         self.J = len(self.reactions)
         species_set = set(self.species)
+        self.species_info = {}
         ids = set()
+        for s in self.species:
+            species_info[s]={'l':{},'h':{}}
+            
+            
         for r in self.reactions:
             if r.id in ids:
                 raise ValueError("Duplicate id: {}".format(r.id))
@@ -687,3 +692,28 @@ class NASACoeffs(self,species):
     else: #make sure temp range is correctly inputed
         raise ValueError("Must input 'low' or 'high' for temp_range")
     return coeffs
+    
+    def get_tmin(species_name, temp_range):
+         #get the tmin based on temp range
+        if temp_range == 'low':
+        query = '''SELECT TLOW FROM LOW WHERE SPECIES_NAME = ? '''
+        tmin = cursor.execute(query,(species_name,)).fetchall()
+        elif temp_range == 'high': 
+            query = '''SELECT TLOW FROM HIGH WHERE SPECIES_NAME = ? '''
+            tmin = cursor.execute(query,(species_name,)).fetchall()
+        else: #make sure temp range is correctly inputed
+            raise ValueError("Must input 'low' or 'high' for temp_range")
+        return tmin
+    
+    def get_tmax(species_name, temp_range):
+         #get the tmax based on temp range
+        if temp_range == 'low':
+        query = '''SELECT THIGH FROM LOW WHERE SPECIES_NAME = ? '''
+        tmax = cursor.execute(query,(species_name,)).fetchall()
+        elif temp_range == 'high': 
+            query = '''SELECT THIGH FROM HIGH WHERE SPECIES_NAME = ? '''
+            tmax = cursor.execute(query,(species_name,)).fetchall()
+        else: #make sure temp range is correctly inputed
+            raise ValueError("Must input 'low' or 'high' for temp_range")
+        return tmax
+        
