@@ -139,3 +139,19 @@ def test_RxWtWrongSp():
 		assert(False)
 	except Exception as err:
 		assert(True)
+
+def test_eqtIncst():
+	try:
+		cd = DataParser().parse_file(get_example_data_file('test_eqtIncst.xml'))
+		cd.get_progress_rate([1,2,3,4,5,6,7,8],100)
+		assert(False)
+	except Exception as err:
+		assert(True)
+
+def test_incstReverse():
+	try:
+		cd = DataParser().parse_file(get_example_data_file('test_incstReverse.xml'))
+		cd.get_progress_rate([1,2,3,4,5,6,7,8],100)
+		assert(False)
+	except Exception as err:
+		assert(True)
