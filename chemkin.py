@@ -2,6 +2,13 @@ import numpy as np
 import sqlite3
 import numpy as np
 import pandas as pd
+
+class ThermochemRXNSetWrapper:
+    def __init__(self, rxnData:ReactionData):
+        self.nasa7_coeffs = None    # todo
+        nu_r, nu_p = rxnData.get_nu()
+        self.nuij = nu_p - nu_r
+
 class ReactionData():
     '''
     Contains all the data related to the reaction; i.e reaction & progress rate
@@ -658,3 +665,11 @@ class NASACoeffs(self,species):
                               (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
+    def get_coeffs(species_name, temp_range): # from HW10. might be useful
+        if temp_range == 'high':
+            query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM HIGH WHERE SPECIES_NAME="{}"'''.format(species_name)
+        elif temp_range == 'low':
+            query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM LOW WHERE SPECIES_NAME="{}"'''.format(species_name)
+        coeffs_list = cursor.execute(query).fetchall()
+        coeffs = np.asarray(coeffs_list)
+        return coeffs
