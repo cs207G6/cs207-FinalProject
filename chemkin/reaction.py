@@ -249,6 +249,15 @@ class ReactionData:
         omega: numpy array of floats
                size: num_reactions
                progress rate of each reaction
+        
+        EXAMPLES:
+        ========
+        >>> from .parser import DataParser
+        >>> data_parser = DataParser()
+        >>> reaction_data = data_parser.parse_file("example_data/rxns.xml")
+        >>> progress_rates = reaction_data.get_progress_rate([1,2,3,4,5,6],100)
+        >>> print(progress_rates)
+        [  1.06613928e-26   1.85794997e-09   1.20000000e+04]
         """
         if len(concs) != self.I:
             raise ValueError("concs must be a list of concentrations of size {}".format(self.I))
@@ -270,6 +279,16 @@ class ReactionData:
         RETURNS:
         ========
         array: reaction rate of each species
+        
+        EXAMPLES:
+        ========
+        >>> from .parser import DataParser
+        >>> data_parser = DataParser()
+        >>> reaction_data = data_parser.parse_file("example_data/rxns.xml")
+        >>> progress_rates = reaction_data.get_progress_rate([1,2,3,4,5,6],100)
+        >>> reaction_rates = reaction_data.get_reaction_rate(progress_rates)
+        >>> print(reaction_rates[:4])
+        [  1.20000000e+04  -1.85794997e-09  -1.20000000e+04  -1.20000000e+04]
         """
         nu_react, nu_prod = self.get_nu()
         return self.__reaction_rate(nu_react, nu_prod, progress_rates)
