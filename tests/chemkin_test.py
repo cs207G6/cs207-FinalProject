@@ -117,7 +117,7 @@ def test_progRateNonEle():
         assert True
         
 def test_mixreverse():
-	cd = DataParser().parse_file('test_mixreverse.xml')
+	cd = DataParser().parse_file(get_example_data_file('test_mixreverse.xml'))
 	try:
 		cd.get_progress_rate([1,2,3,4,5,6,7,8],100)
 		assert(True)
@@ -126,7 +126,7 @@ def test_mixreverse():
 
 def test_allreverse():
 	try:
-		cd = DataParser().parse_file('test_allreverse.xml')
+		cd = DataParser().parse_file(get_example_data_file('test_allreverse.xml'))
 		cd.get_progress_rate([1,2,3,4,5,6,7,8],100)
 		assert(True)
 	except Exception as err:
@@ -134,7 +134,7 @@ def test_allreverse():
 
 def test_RxWtWrongSp():
 	try:
-		cd = DataParser().parse_file('test_RxWtWrongSp.xml')
+		cd = DataParser().parse_file(get_example_data_file('test_RxWtWrongSp.xml'))
 		cd.get_progress_rate([1,2,3,4,5,6,7,8],100)
 		assert(False)
 	except Exception as err:
