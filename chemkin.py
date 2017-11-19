@@ -1,4 +1,7 @@
 import numpy as np
+import sqlite3
+import numpy as np
+import pandas as pd
 class ReactionData():
     '''
     Contains all the data related to the reaction; i.e reaction & progress rate
@@ -566,4 +569,78 @@ class DataParser():
             reaction = self._parse_reaction(r)
             reactions.append(reaction)
         return ReactionData(id, species, reactions)
+    
+     def create_db(self,filename):
+            #Import SQLlite
+            pd.set_option('display.width', 500)
+            pd.set_option('display.max_columns', 100)
+            pd.set_option('display.notebook_repr_html', True)
+
+            db = sqlite3.connect('HW10_demo.sqlite')
+            cursor = db.cursor()
+            cursor.execute("DROP TABLE IF EXISTS LOW")
+            cursor.execute("DROP TABLE IF EXISTS HIGH")
+            cursor.execute("PRAGMA foreign_keys=1")
+
+            #Create High and Low tables
+            cursor.execute('''CREATE TABLE LOW ( 
+                           SPECIES_NAME TEXT NOT NULL, 
+                           TLOW REAL NOT NULL, 
+                           THIGH REAL NOT NULL, 
+                           COEFF_1 TEXT NOT NULL,
+                           COEFF_2 TEXT NOT NULL,
+                           COEFF_3 TEXT NOT NULL,
+                           COEFF_4 TEXT NOT NULL,
+                           COEFF_5 TEXT NOT NULL,
+                           COEFF_6 TEXT NOT NULL,
+                           COEFF_7 TEXT NOT NULL)''')
+
+            # Commit changes to the database
+            db.commit()
+            cursor.execute('''CREATE TABLE HIGH (
+                           SPECIES_NAME TEXT NOT NULL, 
+                           TLOW REAL NOT NULL, 
+                           THIGH REAL NOT NULL, 
+                           COEFF_1 TEXT NOT NULL,
+                           COEFF_2 TEXT NOT NULL,
+                           COEFF_3 TEXT NOT NULL,
+                           COEFF_4 TEXT NOT NULL,
+                           COEFF_5 TEXT NOT NULL,
+                           COEFF_6 TEXT NOT NULL,
+                           COEFF_7 TEXT NOT NULL)''')
+            db.commit()
+            
+            #Parse XML to get info for each species
+            tree = ET.parse(filename)
+            root = tree.getroot()
+
+            #get species
+            species = root.find('speciesData').findall('species')
+
+            for specie in species:
+                name = specie.get('name')
+
+                #get low temp high/low and coeffs for each specie
+                NASA = specie.find('thermo').findall('NASA')
+
+                #get low info
+                low_tmax = NASA[0].get('Tmax')
+                low_tmin = NASA[0].get('Tmin')
+                Low_C_1,Low_C_2,Low_C_3,Low_C_4,Low_C_5,Low_C_6,Low_C_7 = NASA[0].find('floatArray').text.split()
+                lows_to_insert = (name,float(low_tmin),float(low_tmax),Low_C_1,Low_C_2,Low_C_3,Low_C_4,Low_C_5,Low_C_6,Low_C_7)
+
+
+                #get low info
+                high_tmax = NASA[1].get('Tmax')
+                high_tmin = NASA[1].get('Tmin')
+                High_C_1,High_C_2,High_C_3,High_C_4,High_C_5,High_C_6,High_C_7 = NASA[1].find('floatArray').text.split()
+                high_to_insert = name,float(high_tmin),float(high_tmax),High_C_1,High_C_2,High_C_3,High_C_4,High_C_5,High_C_6,High_C_7
+
+                #Insert the values for each species into table
+                cursor.execute('''INSERT INTO LOW 
+                              (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', lows_to_insert)
+                cursor.execute('''INSERT INTO HIGH 
+                              (SPECIES_NAME, TLOW, THIGH, COEFF_1, COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
