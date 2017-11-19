@@ -139,3 +139,10 @@ def test_RxWtWrongSp():
 		assert(False)
 	except Exception as err:
 		assert(True)
+
+def test_WrongSp_in_array():
+    try:
+        DataParser().parse_file(get_example_data_file('test_WrongSp_in_array.xml'))
+        assert False
+    except Exception:
+        assert True
