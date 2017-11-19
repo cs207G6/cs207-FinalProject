@@ -131,3 +131,11 @@ def test_allreverse():
 		assert(True)
 	except Exception as err:
 		assert(False)
+
+def test_RxWtWrongSp():
+	try:
+		cd = DataParser().parse_file('test_RxWtWrongSp.xml')
+		cd.get_progress_rate([1,2,3,4,5,6,7,8],100)
+		assert(False)
+	except Exception as err:
+		assert(True)
