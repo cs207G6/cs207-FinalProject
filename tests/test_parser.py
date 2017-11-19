@@ -83,7 +83,7 @@ def test_idCollision():
 def test_progRateWrongDimension():
     cd = parser_file('rxns.xml')
     try:
-        cd.get_progress_rate([1, 2, 3, 4, 5], 100)
+        cd.get_progress_rate([1, 2, 3, 4, 5], 1000)
         assert False
     except Exception:
         assert True
@@ -108,7 +108,7 @@ def test_progRateWrongSp2():
 def test_progRateNonIrr():
     cd = parser_file('test_nonirr.xml')
     try:
-        cd.get_progress_rate([1, 2, 3, 4, 5, 6], 100)
+        cd.get_progress_rate([1, 2, 3, 4, 5, 6], 1000)
         assert False
     except Exception:
         assert True
@@ -117,7 +117,7 @@ def test_progRateNonIrr():
 def test_progRateNonEle():
     cd = parser_file('test_nonele.xml')
     try:
-        cd.get_progress_rate([1, 2, 3, 4, 5, 6], 100)
+        cd.get_progress_rate([1, 2, 3, 4, 5, 6], 1000)
         assert False
     except Exception:
         assert True
@@ -126,7 +126,7 @@ def test_progRateNonEle():
 def test_mixreverse():
     cd = parser_file('test_mixreverse.xml')
     try:
-        cd.get_progress_rate([1, 2, 3, 4, 5, 6, 7, 8], 100)
+        cd.get_progress_rate([1, 2, 3, 4, 5, 6, 7, 8], 1000)
         assert (True)
     except Exception as err:
         assert (False)
@@ -135,7 +135,7 @@ def test_mixreverse():
 def test_allreverse():
     try:
         cd = parser_file('test_allreverse.xml')
-        cd.get_progress_rate([1, 2, 3, 4, 5, 6, 7, 8], 100)
+        cd.get_progress_rate([1, 2, 3, 4, 5, 6, 7, 8], 1000)
         assert (True)
     except Exception as err:
         assert (False)
@@ -144,7 +144,7 @@ def test_allreverse():
 def test_RxWtWrongSp():
     try:
         cd = parser_file('test_RxWtWrongSp.xml')
-        cd.get_progress_rate([1, 2, 3, 4, 5, 6, 7, 8], 100)
+        cd.get_progress_rate([1, 2, 3, 4, 5, 6, 7, 8], 1000)
         assert (False)
     except Exception as err:
         assert (True)

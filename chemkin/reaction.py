@@ -3,13 +3,6 @@ import numpy as np
 from . import thermochem
 
 
-class ThermochemRXNSetWrapper:
-    def __init__(self, rxn_data):
-        self.nasa7_coeffs = None  # todo
-        nu_r, nu_p = rxn_data.get_nu()
-        self.nuij = nu_p - nu_r
-
-
 class ReactionData:
     """
     Contains all the data related to the reaction; i.e reaction & progress rate
@@ -34,20 +27,20 @@ class ReactionData:
         self.I = len(self.species)
         self.J = len(self.reactions)
         species_set = set(self.species)
-        self.species_info = {}
+        self.nasa = {}
         ids = set()
         for s in self.species:
-            self.species_info[s] = {'l': {}, 'h': {}}
+            self.nasa[s] = {'l': {}, 'h': {}}
 
             low_coeffs, low_tmin, low_tmax = nasa.get_coeffs(s, 'low')
             high_coeffs, high_tmin, high_tmax = nasa.get_coeffs(s, 'high')
 
-            self.species_info[s]['l']['Tmax'] = low_tmax
-            self.species_info[s]['l']['Tmin'] = low_tmin
-            self.species_info[s]['l']['coeffs'] = low_coeffs
-            self.species_info[s]['h']['Tmax'] = high_tmax
-            self.species_info[s]['h']['Tmin'] = high_tmin
-            self.species_info[s]['h']['coeffs'] = high_coeffs
+            self.nasa[s]['l']['Tmax'] = low_tmax
+            self.nasa[s]['l']['Tmin'] = low_tmin
+            self.nasa[s]['l']['coeffs'] = low_coeffs
+            self.nasa[s]['h']['Tmax'] = high_tmax
+            self.nasa[s]['h']['Tmin'] = high_tmin
+            self.nasa[s]['h']['coeffs'] = high_coeffs
 
         for r in self.reactions:
             if r.id in ids:
@@ -74,8 +67,45 @@ class ReactionData:
                 nu_prod[inv_dict[product], j] = reaction.products[product]
         return nu_react, nu_prod
 
+    def get_nasa_coeff(self, species, temp):
+        if species not in self.nasa:
+            raise KeyError("NASA coefficient for {} is not specified".format(species))
+        nasa = self.nasa[species]
+        if nasa['l']['Tmin'] <= temp <= nasa['l']['Tmax']:
+            nasa_coeff = nasa['l']['coeffs']
+        elif nasa['h']['Tmin'] <= temp <= nasa['h']['Tmax']:
+            nasa_coeff = nasa['h']['coeffs']
+        else:
+            raise ValueError("NASA coefficient for {} at T={} is not specified".format(species, temp))
+        return np.array(nasa_coeff)
+
+    def get_nasa_coeff_matrix(self, T):
+        inv_dict = {v: k for (k, v) in enumerate(self.species)}
+        result = np.zeros((self.I, 7))
+        species_set = set()
+
+        for reaction in self.reactions:
+            if reaction.reversible:
+                species_set = species_set | set(reaction.reactants.keys())
+                species_set = species_set | set(reaction.products.keys())
+        for species in species_set:
+            result[inv_dict[species], :] = self.get_nasa_coeff(species, T)
+
+        return result
+
     def get_k(self, T):
         return np.array([reaction.rate_coeff.get_K(T) for reaction in self.reactions])
+
+    def get_kb(self, kf, nu, T):
+        nasa = self.get_nasa_coeff_matrix(T)
+        tc = thermochem.ThermoChem(thermochem.ThermochemRXNSetWrapper(nasa), T)
+        result = [0] * len(self.reactions)
+        for j, reaction in enumerate(self.reactions):
+            if reaction.reversible:
+                result[j] = tc.backward_coeffs(nu[:, j], kf[j])
+            else:
+                pass
+        return np.array(result)
 
     def get_progress_rate(self, concs, T):
         """Returns the progress rate of a system of irreversible, elementary reactions
@@ -107,15 +137,19 @@ class ReactionData:
         if len(concs) != self.I:
             raise ValueError("concs must be a list of concentrations of size {}".format(self.I))
         for r in self.reactions:
-            if r.reversible:
-                rxnset = ThermochemRXNSetWrapper(self)
-                backward = thermochem.ThermoChem(rxnset)
-                kf = self.get_k(T)
-                return self.__progress_rate(self.get_nu()[0], np.array(concs), backward.backward_coeffs(kf, T))
-                # raise NotImplementedError("Progress rate for reversible reactions is not supported.")
             if r.type != "Elementary":
                 raise NotImplementedError("Progress rate for {} reactions is not supported.", format(r.type))
-        return self.__progress_rate(self.get_nu()[0], np.array(concs), self.get_k(T))
+        nus = self.get_nu()
+
+        nu = nus[1] - nus[0]
+
+        kf = self.get_k(T)
+        forward_part = self.__progress_rate(self.get_nu()[0], np.array(concs), kf)
+
+        kb = self.get_kb(kf=kf, nu=nu, T=T)
+        backward_part = self.__progress_rate(self.get_nu()[1], np.array(concs), kb)
+
+        return forward_part - backward_part
 
     def get_reaction_rate(self, progress_rates):
         """Returns the reaction rate of a system of irreversible, elementary reactions

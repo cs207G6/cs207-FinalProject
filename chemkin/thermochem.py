@@ -1,6 +1,11 @@
 import numpy as np
 
 
+class ThermochemRXNSetWrapper:
+    def __init__(self, nasa):
+        self.nasa7_coeffs = nasa
+
+
 class ThermoChem:
     """Methods for calculating the backward reaction rate.
 
@@ -20,11 +25,13 @@ class ThermoChem:
     to be of some use.
     """
 
-    def __init__(self, rxnset):
+    def __init__(self, rxnset, T):
         self.rxnset = rxnset
         self.p0 = 1.0e+05  # Pa
         self.R = 8.3144598  # J / mol / K
-        self.gamma = np.sum(self.rxnset.nuij, axis=0)
+        self.h_rt = self.H_over_RT(T)
+        self.s_rt = self.S_over_R(T)
+        self.T = T
 
     def Cp_over_R(self, T):
         # WARNING:  This line will depend on your own data structures!
@@ -63,18 +70,20 @@ class ThermoChem:
 
         return S_R
 
-    def backward_coeffs(self, kf, T):
+    def backward_coeffs(self, nuij, kf):
+        gamma = np.sum(nuij, axis=0)
+
         # Change in enthalpy and entropy for each reaction
-        delta_H_over_RT = np.dot(self.rxnset.nuij.T, self.H_over_RT(T))
-        delta_S_over_R = np.dot(self.rxnset.nuij.T, self.S_over_R(T))
+        delta_H_over_RT = np.dot(nuij.T, self.h_rt)
+        delta_S_over_R = np.dot(nuij.T, self.s_rt)
 
         # Negative of change in Gibbs free energy for each reaction
         delta_G_over_RT = delta_S_over_R - delta_H_over_RT
 
         # Prefactor in Ke
-        fact = self.p0 / self.R / T
+        fact = self.p0 / self.R / self.T
 
         # Ke
-        kb = fact ** self.gamma * np.exp(delta_G_over_RT)
+        kb = fact ** gamma * np.exp(delta_G_over_RT)
 
         return kf / kb
