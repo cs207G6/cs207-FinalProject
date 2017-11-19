@@ -668,10 +668,16 @@ class NASACoeffs(self,species):
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', high_to_insert)
 
     def get_coeffs(species_name, temp_range):
-        if temp_range == 'high':
-            query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM HIGH WHERE SPECIES_NAME="{}"'''.format(species_name)
-        elif temp_range == 'low':
-            query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM LOW WHERE SPECIES_NAME="{}"'''.format(species_name)
-        coeffs_list = cursor.execute(query).fetchall()
-        coeffs = np.asarray(coeffs_list)
+        query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM HIGH WHERE SPECIES_NAME="{}"'''.format(species_name)
+        high_list = cursor.execute(query).fetchall()
+        high_coeffs = np.asarray(high_list)
+        query = '''SELECT COEFF_1, COEFF_2, COEFF_3, COEFF_4, COEFF_5, COEFF_6, COEFF_7 FROM LOW WHERE SPECIES_NAME="{}"'''.format(species_name)
+        low_list = cursor.execute(query).fetchall()
+        low_coeffs = np.asarray(low_list)
+
+        coeffs = {}
+        coeffs[species_name] = {}
+        coeffs[species_name]['high'] = high_coeffs
+        coeffs[species_name]['low'] = low_coeffs
+
         return coeffs
