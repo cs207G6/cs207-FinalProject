@@ -92,7 +92,7 @@ class ReactionData():
                 rxnset = ThermochemRXNSetWrapper(self)
                 backward = thermochem(rxnset) 
                 kf = self.get_k(T)
-                return self.__progress_rate(self.get_nu()[0], np.array(concs), backward.backward_coeffs(kf,T)) # ???what is kf?
+                return self.__progress_rate(self.get_nu()[0], np.array(concs), backward.backward_coeffs(kf,T))
                 #raise NotImplementedError("Progress rate for reversible reactions is not supported.")
             if r.type != "Elementary":
                 raise NotImplementedError("Progress rate for {} reactions is not supported.",format(r.type))
