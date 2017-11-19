@@ -110,7 +110,7 @@ class DataParser:
         return Reaction(id, reversible=reversible, type_=type_, reactants=reactants, products=products,
                         rate_coeff=rate_coeff)
 
-    def parse_file(self, filename):
+    def parse_file(self, filename, nasa):
         """
         Parse a reaction xml file and return ReactionData object
 
@@ -134,4 +134,4 @@ class DataParser:
         for (i, r) in enumerate(tree.find('reactionData').findall('reaction')):
             reaction = self._parse_reaction(r)
             reactions.append(reaction)
-        return ReactionData(id, species, reactions)
+        return ReactionData(id, species, reactions, nasa)
