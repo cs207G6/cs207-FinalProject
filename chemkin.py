@@ -571,6 +571,19 @@ class DataParser():
         return ReactionData(id, species, reactions)
     
      def create_db(self,filename):
+            """
+            Parse a reaction xml file and return sql database with 
+
+            Arguments
+            ----------
+            filename: str
+                filename of reaction xml file 
+
+            Return
+            ----------
+            HW10_demo.sqlite
+                database with Nasa coefficient for each species
+            """
             #Import SQLlite
             pd.set_option('display.width', 500)
             pd.set_option('display.max_columns', 100)
