@@ -570,6 +570,7 @@ class DataParser():
             reactions.append(reaction)
         return ReactionData(id, species, reactions)
     
+class NASACoeffs(self,species):   
      def create_db(self,filename):
             """
             Parse a reaction xml file and return sql database with 
