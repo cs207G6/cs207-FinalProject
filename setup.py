@@ -35,7 +35,7 @@ setup(
 
     packages=find_packages(exclude=['data', 'documentation', 'tests']),
 
-    install_requires=['numpy', 'pandas', 'pytest-runner', 'pytest'],
+    install_requires=['numpy', 'pandas', 'pytest-runner'],
 
     tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner'],
 
