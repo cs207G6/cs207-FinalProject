@@ -204,7 +204,7 @@ def test_undefined_sp():
         assert True
 def test_highlow():
     try:
-        nasa.get_coeffs("O2", 'high')[1:] == np.array([1000,3500])
-        assert False
-    except Exception:
+        nasa.get_coeffs("O2", 'low')[1:] == np.array([200,1000])
         assert True
+    except Exception:
+        assert False
