@@ -1,6 +1,7 @@
 from chemkin.parser import DataParser
 from chemkin.nasa import NASACoeffs
 from os.path import join
+import numpy as np
 
 nasa = NASACoeffs()
 
