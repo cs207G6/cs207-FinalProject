@@ -172,3 +172,11 @@ def test_wrong_num_reactants():
         assert False
     except Exception:
         assert True
+
+
+def test_unknown_coeff():
+    try:
+        parse_file('test_notimplementedCoeff.xml')
+        assert False
+    except NotImplementedError:
+        assert True
