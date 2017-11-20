@@ -91,13 +91,6 @@ class NASACoeffs:
     def get_coeffs(self, species_name, temp_range):
         db = sqlite3.connect(self.database_file)
         cursor = db.cursor()
-        # get list of species
-        query = '''SELECT SPECIES_NAME FROM LOW'''
-        species_list = cursor.execute(query).fetchall()
-        species_list = [s[0].strip(',') for s in species_list]
-        # check that specie_name inputed it correct type of species
-        if species_name not in species_list:
-            raise ValueError("Input must be 'O','O2','H','H2','OH','H2O','HO2','H2O2' for species_name")
         # get the coeffs based on temp range
         if temp_range == 'low':
             query = '''SELECT COEFF_1,COEFF_2,COEFF_3,COEFF_4,COEFF_5,COEFF_6,COEFF_7,TLOW,THIGH FROM LOW WHERE SPECIES_NAME = ? '''
