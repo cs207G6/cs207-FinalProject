@@ -145,10 +145,12 @@ class ReactionData:
         nu = nus[1] - nus[0]
 
         kf = self.get_k(T)
-        forward_part = self.__progress_rate(self.get_nu()[0], np.array(concs), kf)
+        forward_part = self.__progress_rate(nus[0], np.array(concs), kf)
+        # print("kf", forward_part)
 
         kb = self.get_kb(kf=kf, nu=nu, T=T)
-        backward_part = self.__progress_rate(self.get_nu()[1], np.array(concs), kb)
+        # print("kb", kb)
+        backward_part = self.__progress_rate(nus[1], np.array(concs), kb)
 
         return forward_part - backward_part
 
@@ -198,7 +200,7 @@ class ReactionData:
                size: num_reactions
                progress rate of each reaction
         """
-        progress = k  # Initialize progress rates with reaction rate coefficients
+        progress = k.copy()  # Initialize progress rates with reaction rate coefficients
         for jdx, rj in enumerate(progress):
             if rj < 0:
                 raise ValueError("k = {0:18.16e}:  Negative reaction rate coefficients are prohibited!".format(rj))
@@ -210,7 +212,6 @@ class ReactionData:
                     raise ValueError(
                         "nu_{0}{1} = {2}:  Negative stoichiometric coefficients are prohibited!".format(idx, jdx,
                                                                                                         nu_ij))
-
                 progress[jdx] *= xi ** nu_ij
         return progress
 

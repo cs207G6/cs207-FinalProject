@@ -62,8 +62,12 @@ class ThermoChem:
         gamma = np.sum(nuij, axis=0)
 
         # Change in enthalpy and entropy for each reaction
-        delta_H_over_RT = np.dot(nuij.T, self.h_rt)
-        delta_S_over_R = np.dot(nuij.T, self.s_rt)
+
+        assert (len(nuij) == len(self.h_rt))
+        assert (len(nuij) == len(self.s_rt))
+
+        delta_H_over_RT = np.dot(nuij, self.h_rt)
+        delta_S_over_R = np.dot(nuij, self.s_rt)
 
         # Negative of change in Gibbs free energy for each reaction
         delta_G_over_RT = delta_S_over_R - delta_H_over_RT
