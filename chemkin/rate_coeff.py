@@ -1,15 +1,15 @@
 import numpy as np
 
 
-class RateCoeff():
+class RateCoeff:
     def get_K(self, T):
         raise NotImplementedError()
 
 
 class ModifiedArrhenius(RateCoeff):
-    '''
-    Caculate the rate coeffcient for Modified Arrhenius Reaction
-    
+    """
+    Calculate the rate coefficient for Modified Arrhenius Reaction
+
     ARGUMENTS:
     ==========
     b = modified arrhenius prefactor
@@ -20,7 +20,7 @@ class ModifiedArrhenius(RateCoeff):
         float
     R = ideal gas constant (optional; default 8.314)
         must be positive
-     
+
     ATTRIBUTES:
     ===========
     b = modified arrhenius prefactor
@@ -31,16 +31,13 @@ class ModifiedArrhenius(RateCoeff):
         float
     R = ideal gas constant (optional; default 8.314)
         must be positive
-    '''
+    """
 
     def __init__(self, a, b, E, R=8.314):
         self.b = b
         self.A = a
         self.E = E
         self.R = R
-
-    def __repr__(self):
-        return "a = {}, b = {}, E = {}, R = {}".format(self.A, self.b, self.E, self.R)
 
     def get_K(self, T):
         """Calculates the modified Arrhenius reaction rate coefficient
@@ -64,6 +61,11 @@ class ModifiedArrhenius(RateCoeff):
         ========
         k: float
            Modified Arrhenius reaction rate coefficient
+
+        EXAMPLES:
+        ===========
+        >>> ModifiedArrhenius(10,20,30).get_K(50)
+        8.872748484824047e+34
         """
         if self.A < 0.0:
             raise ValueError("A = {0:18.16e}:  Negative Arrhenius prefactor is prohibited!".format(self.A))
@@ -78,9 +80,9 @@ class ModifiedArrhenius(RateCoeff):
 
 
 class Arrhenius(RateCoeff):
-    '''
-    Caculate the rate coeffcient for Arrhenius Reaction
-    
+    """
+    Calculate the rate coefficient for Arrhenius Reaction
+
     ARGUMENTS:
     ==========
     a = arrhenius prefactor
@@ -89,7 +91,7 @@ class Arrhenius(RateCoeff):
         float
     R = ideal gas constant (optional; default 8.314)
         must be positive
-     
+
     ATTRIBUTES:
     ===========
     a = arrhenius prefactor
@@ -98,7 +100,7 @@ class Arrhenius(RateCoeff):
         float
     R = ideal gas constant (optional; default 8.314)
         must be positive
-    '''
+    """
 
     def __init__(self, a, E, R=8.314):
         self.A = a
@@ -125,6 +127,11 @@ class Arrhenius(RateCoeff):
         ========
         k: float
            Arrhenius reaction rate coefficient
+
+        EXAMPLES:
+        ===========
+        >>> Arrhenius(10,20,30).get_K(50)
+        9.8675516180719569
         """
 
         if self.A < 0.0:
@@ -140,22 +147,22 @@ class Arrhenius(RateCoeff):
 
 
 class Constant(RateCoeff):
-    '''
-    Caculate the rate coeffcient for Modified Arrhenius Reaction
-    
+    """
+    Calculate the rate coefficient for Modified Arrhenius Reaction
+
     ARGUMENTS:
     ==========
-    k = constant rate coeffcient 
+    k = constant rate coeffcient
         float
         must be positive
- 
-     
+
+
     ATTRIBUTES:
     ===========
-    k = constant rate coeffcient 
+    k = constant rate coeffcient
         float
         must be positive
-    '''
+    """
 
     def __init__(self, const):
         self.k = const
@@ -171,6 +178,10 @@ class Constant(RateCoeff):
         ========
         k: float
            Constant reaction rate coefficient
+        EXAMPLES:
+        ========
+        >>> Constant(1).get_K(50)
+        1
         """
         if self.k < 0:
             raise ValueError("Negative reaction rate coefficients are prohibited.")
