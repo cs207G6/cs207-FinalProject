@@ -55,14 +55,14 @@ class NASACoeffs:
                        `COEFF_6` REAL,
                        `COEFF_7` REAL)''')
         import xml.etree.ElementTree as et
-        with open("./test.xml") as f:
+        with open(filename) as f:
             root = et.fromstring(f.read())
         speciesData = root.find("speciesData")
         high_data = []
         low_data = []
         for species in speciesData.findall("species"):
             sname = species.attrib['name']
-            NASAs = species.find('thermal').findall('NASA')
+            NASAs = species.find('thermo').findall('NASA')
             assert (len(NASAs) == 2)
             max0 = NASAs[0].attrib['Tmax']
             max1 = NASAs[1].attrib['Tmax']
@@ -73,7 +73,8 @@ class NASACoeffs:
                 high = NASAs[1]
                 low = NASAs[0]
             get_data = lambda d: tuple(
-                [sname, d.attrib['Tmin'], d.attrib['Tmax']] + [float(e) for e in d.find('floatArray').text.split(',')])
+                [sname, d.attrib['Tmin'], d.attrib['Tmax']] + [
+                    float(e.strip()) for e in d.find('floatArray').text.split(',')])
             high_data.append(get_data(high))
             low_data.append(get_data(low))
 
@@ -85,8 +86,8 @@ class NASACoeffs:
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', low_data)
         db.commit()
         cursor.execute('''SELECT * FROM high''').fetchall()
-        db.close()
         cursor.close()
+        db.close()
 
     def get_coeffs(self, species_name, temp_range):
         db = sqlite3.connect(self.database_file)
