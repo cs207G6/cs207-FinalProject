@@ -30,11 +30,14 @@ class ReactionData:
         self.nasa = {}
         ids = set()
         for s in self.species:
+            try:
+                low_coeffs, low_tmin, low_tmax = nasa.get_coeffs(s, 'low')
+                high_coeffs, high_tmin, high_tmax = nasa.get_coeffs(s, 'high')
+            except KeyError:
+                # don't raise exception here, possible to have mixed system
+                continue
+
             self.nasa[s] = {'l': {}, 'h': {}}
-
-            low_coeffs, low_tmin, low_tmax = nasa.get_coeffs(s, 'low')
-            high_coeffs, high_tmin, high_tmax = nasa.get_coeffs(s, 'high')
-
             self.nasa[s]['l']['Tmax'] = low_tmax
             self.nasa[s]['l']['Tmin'] = low_tmin
             self.nasa[s]['l']['coeffs'] = low_coeffs
@@ -69,14 +72,14 @@ class ReactionData:
 
     def get_nasa_coeff(self, species, temp):
         if species not in self.nasa:
-            raise KeyError("NASA coefficient for {} is not specified".format(species))
+            raise NotImplementedError("NASA coefficient for {} is not specified".format(species))
         nasa = self.nasa[species]
         if nasa['l']['Tmin'] <= temp <= nasa['l']['Tmax']:
             nasa_coeff = nasa['l']['coeffs']
         elif nasa['h']['Tmin'] <= temp <= nasa['h']['Tmax']:
             nasa_coeff = nasa['h']['coeffs']
         else:
-            raise ValueError("NASA coefficient for {} at T={} is not specified".format(species, temp))
+            raise NotImplementedError("NASA coefficient for {} at T={} is not specified".format(species, temp))
         return np.array(nasa_coeff)
 
     def get_nasa_coeff_matrix(self, T):
@@ -103,8 +106,6 @@ class ReactionData:
         for j, reaction in enumerate(self.reactions):
             if reaction.reversible:
                 result[j] = tc.backward_coeffs(nu[:, j], kf[j])
-            else:
-                pass
         return np.array(result)
 
     def get_progress_rate(self, concs, T):
