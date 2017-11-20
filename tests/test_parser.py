@@ -184,7 +184,7 @@ def test_unknown_coeff():
 
 def test_db():
     try: 
-        (nasa.get_coeffs("H", 'high')[0] == np.array([3.282538 ,1.483088e-03 ,-7.579667e-07, 2.094706e-10, -2.167178e-14, -1088.457720, 5.453231]))
+        nasa.get_coeffs("H", 'high')[0] == np.array([3.282538 ,1.483088e-03 ,-7.579667e-07, 2.094706e-10, -2.167178e-14, -1088.457720, 5.453231])
         assert True
     except Exception:
         assert False
