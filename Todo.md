@@ -12,7 +12,7 @@ UI, visualization model, expand NASA coefficients
 	- Species
 	- Concentrations
 	- Whether reversible
-	- Elementary reactoins
+	- Elementary reactions
 		- Reaction Coefficient
 			- A,b,E OR
 			- Direct k
@@ -53,5 +53,5 @@ UI, visualization model, expand NASA coefficients
 - Otherwise
 	-  pick the nasa high/low range
 
-## expand NASA Coeffs
+## Expand NASA Coeffs
 - DONE!!!?
