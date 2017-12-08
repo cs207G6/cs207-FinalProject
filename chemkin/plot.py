@@ -21,7 +21,7 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
     reaction_data = user_data
     species = reaction_data.species
     concentration = input_concentration
-    temp_range = np.linspace(lower_T,upper_T,num=100)
+    temp_range = list(np.linspace(lower_T,upper_T,num=100))
     progress_rates_list = [None] * len(temp_range)
     reaction_rates_list = [None] * len(temp_range)
 
