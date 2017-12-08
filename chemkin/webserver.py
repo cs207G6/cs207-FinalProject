@@ -87,8 +87,8 @@ class Plots(Resource):
             T_range, progress_rate_range, reaction_rate_range, current_T, species, pc, rc = chemkin.plot.range_data_collection(
                 reaction_data, conc, tlow, thigh, T)
 
-            pic_width = 600 // 75
-            pic_length = 400 // 75
+            pic_width = 1200 // 75
+            pic_length = 800 // 75
 
             progress_plot = chemkin.plot.progress_rate_plot_generation(T_range, progress_rate_range, current_T, pc,
                                                                        pic_width,
