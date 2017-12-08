@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api
 from flask.ext.jsonpify import jsonify
 import uuid
@@ -56,6 +56,12 @@ class WebServer:
         self.api = Api(self.app)
         self.api.add_resource(Session, '/session')
         self.api.add_resource(Rates, '/rates/<sid>')
+        path = os.path.dirname(n.__file__)
+        self.web_folder = os.path.join(path, "web")
 
     def start(self):
+        @self.app.route('/<path:path>')
+        def send_js(path):
+            return send_from_directory('', self.web_folder)
+
         self.app.run(port=self.port)

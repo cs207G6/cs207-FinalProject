@@ -40,8 +40,8 @@ setup(
     tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner'],
 
     package_data={
-        '': ['example_data/*.xml', 'database/*.sqlite']
+        '': ['example_data/*.xml', 'database/*.sqlite', 'web/*.html']
     },
-      
-    include_package_data = True
+
+    include_package_data=True
 )
