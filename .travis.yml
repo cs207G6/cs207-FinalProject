@@ -2,7 +2,7 @@ language: python
 python:
     - "3.5"
 before_install:
-    - pip install pytest pytest-cov
+    - pip install pytest pytest-cov flask flask-jsonpify flask-restful
     - pip install coveralls
 script:
     - py.test

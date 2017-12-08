@@ -37,11 +37,11 @@ setup(
 
     install_requires=['numpy', 'pandas', 'pytest-runner', 'flask', 'flask-jsonpify', 'flask-restful'],
 
-    tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner'],
+    tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner', 'flask', 'flask-jsonpify', 'flask-restful'],
 
     package_data={
-        '': ['example_data/*.xml', 'database/*.sqlite']
+        '': ['example_data/*.xml', 'database/*.sqlite', 'web/*.html']
     },
-      
-    include_package_data = True
+
+    include_package_data=True
 )

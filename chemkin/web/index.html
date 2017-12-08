@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chemkin</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Kube CSS -->
+    <link rel="stylesheet" href="kube-6.5.2/dist/css/kube.css">
+    <link rel="stylesheet" href="master.css">
+    <!-- Kube JS + jQuery are used for some functionality, but are not required for the basic setup -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="kube-6.5.2/dist/js/kube.js"></script>
+</head>
+<body>
+    <div id ="bck"></div>
+    <div id = "title">
+        <h1  class ="title">Chemkin & Some Title</h1>
+        <p>This project is for CS207 put a description here!</p>
+    </div>
+    <div id = "btn">
+        <label class="filebtn">
+            <input id = "xml_upload" type="file" required/>
+            <span>Upload .xml</span>
+        </label>
+    </div>
+<form>
+    <input type="file" id="xml_upload" name="xml_upload[]" multiple="">
+
+    <p id="file_upload_result"></p>
+
+    <div id="species">
+    </div>
+
+    <label for="_temp">Temperature</label><input id="_temp" value="100">
+
+    <input type="button" id="get_rates" value="Get Rates">
+
+    <p id="progress_rates"></p>
+    <p id="reaction_rates"></p>
+</form>
+
+<script type="text/javascript">
+    session_id = "NONE";
+
+    function createSession(evt) {
+        document.getElementById('file_upload_result').innerText = "Uploading";
+        var files = evt.target.files;
+        if (files.length === 0) {
+            return;
+        }
+        var file = files[0];
+
+        var reader = new FileReader();
+
+        // Closure to capture the file information.
+        reader.onload = function (e) {
+            var xml_data = e.target.result;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/session');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    document.getElementById('file_upload_result').innerText = "Uploaded";
+                    var response = JSON.parse(xhr.responseText);
+                    if (response['status'] === 'failed') {
+                        alert(response['reason']);
+                        return;
+                    }
+                    session_id = response['id'];
+                    species = response['species'];
+                    showSpecies();
+                }
+                else {
+                    alert('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify({"data": xml_data}));
+
+        };
+
+        reader.readAsText(file);
+
+    }
+
+    function showSpecies() {
+        document.getElementById('species').innerHTML = "";
+        for (var i = 0; i < species.length; i++) {
+            var sp = species[i];
+            var div = document.createElement("div");
+            div.className = "form-item"
+            var label = document.createElement('p');
+            label.innerText = sp;
+            div.appendChild(label);
+            var input = document.createElement("input");
+            input.id = "species_" + sp;
+            input.className = "species"
+            input.value = 0;
+            div.appendChild(input);
+            document.getElementById('species').appendChild(div);
+        }
+    }
+
+    function getRates() {
+        if (session_id === "NONE") {
+            alert("Must upload xml file first!");
+            return;
+        }
+
+        var request_para = {};
+        for (var i = 0; i < species.length; i++) {
+            var sp = species[i];
+            var id = "species_" + sp;
+            request_para[sp] = 1;
+
+            var val = Number(document.getElementById(id).value);
+            if (Number.isNaN(val) || val < 0) {
+                alert("Invalid input for " + sp);
+                return;
+            }
+            request_para[sp] = val;
+        }
+        var temp = Number(document.getElementById('_temp').value);
+
+        if (Number.isNaN(temp) || temp <= 0) {
+            alert("Invalid input for temperature");
+            return;
+        }
+
+        request_para['_temp'] = temp;
+
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '/rates/' + session_id);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
+                if (response['status'] === 'failed') {
+                    alert(response['reason']);
+                    return;
+                }
+                document.getElementById('progress_rates').innerText = response['progress_rates'];
+                document.getElementById('reaction_rates').innerText = response['reaction_rates'];
+            }
+            else {
+                alert('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send(JSON.stringify(request_para));
+    }
+
+    document.getElementById('xml_upload').addEventListener('change', createSession, false);
+    document.getElementById('get_rates').addEventListener('click', getRates, false);
+</script>
+
+</body>
+</html>
