@@ -74,6 +74,9 @@ class Plots(Resource):
         reaction_data = data_parser.parse_file(os.path.join(folder, "data.xml"), nasa)
 
         try:
+            tlow = float(tlow)
+            thigh = float(thigh)
+
             conc = [0] * len(reaction_data.species)
 
             for i, sp in enumerate(reaction_data.species):
@@ -81,25 +84,26 @@ class Plots(Resource):
 
             T = float(request.json['_temp'])
 
-            T_range, progress_rate_range, reaction_rate_range, current_T, species = chemkin.plot.range_data_collection(
+            T_range, progress_rate_range, reaction_rate_range, current_T, species, pc, rc = chemkin.plot.range_data_collection(
                 reaction_data, conc, tlow, thigh, T)
 
-            pic_width = 600 / 75
-            pic_length = 400 / 75
+            pic_width = 600 // 75
+            pic_length = 400 // 75
 
-            progress_plot = chemkin.plot.progress_rate_plot_generation(T_range, progress_rate_range, current_T,
-                                                                       pic_width,
-                                                                       pic_length)
-            reaction_plot = chemkin.plot.reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, species,
+            progress_plot = chemkin.plot.progress_rate_plot_generation(T_range, progress_rate_range, current_T, pc,
                                                                        pic_width,
                                                                        pic_length)
 
-            result = {
+            reaction_plot = chemkin.plot.reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, rc,
+                                                                       species,
+                                                                       pic_width,
+                                                                       pic_length)
+
+            return {
                 "status": "success",
                 'progress_rates': progress_plot,
                 'reaction_rates': reaction_plot
             }
-            return jsonify(result)
         except Exception as e:
             return {'status': 'failed', 'reason': 'Failed to get plots ({})'.format(str(e))}
 
