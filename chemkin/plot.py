@@ -6,9 +6,10 @@ import base64
 from io import BytesIO
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-def range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T, ):
+def range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T):
     """
     user_data: Read data from website that user uploaded
     input_concentration: The concentrations of species input by users
@@ -20,7 +21,7 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
     reaction_data = user_data
     species = reaction_data.species
     concentration = input_concentration
-    temp_range = range(lower_T, upper_T + 1)
+    temp_range = np.linspace(lower_T,upper_T,num=100)
     progress_rates_list = [None] * len(temp_range)
     reaction_rates_list = [None] * len(temp_range)
 
