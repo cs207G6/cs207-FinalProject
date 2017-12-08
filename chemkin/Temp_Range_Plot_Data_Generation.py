@@ -127,7 +127,7 @@ if __name__ == '__main__':
     # test with sample data
     nasa = chemkin.nasa.NASACoeffs()
     data_parser = chemkin.parser.DataParser()
-    user_data = data_parser.parse_file("rxns.xml",nasa)
+    user_data = data_parser.parse_file("example_data/rxns.xml",nasa)
     input_concentration = [1,2,3,4,5,6]
     current_T = 666
     lower_T = 200
