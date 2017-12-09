@@ -40,7 +40,7 @@ setup(
     tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner', 'flask', 'flask-jsonpify', 'flask-restful'],
 
     package_data={
-        '': ['example_data/*.xml', 'database/*.sqlite', 'web/*.html']
+        '': ['example_data/*.xml', 'database/*.sqlite', 'web/*.html', 'web/*.css', 'web/*.js', 'web/*.jpg']
     },
 
     include_package_data=True
