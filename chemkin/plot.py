@@ -137,8 +137,8 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     for i in range(reaction_num):
         # generate a curve for each elementary reaction
         y = [e[i] for e in progress_rate_range]
-        plt.plot(x, y)
-        plt.scatter(x, y, label='Elementary Reaction ' + str(i + 1))
+        plt.plot(x, y,alpha=0.6)
+        plt.scatter(x, y, label='Elementary Reaction ' + str(i + 1),alpha=0.6)
         if i == 0:
             plt.plot(curr_T, progress_rates_current[i], '^r',label='Current Temperature',markersize=12)
         else:
@@ -217,8 +217,8 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     for i in range(species_num):
         # generate a curve for each elementary reaction
         y = [e[i] for e in reaction_rate_range]
-        plt.plot(x, y, label=None)
-        plt.scatter(x, y, label=species[i])
+        plt.plot(x, y, label=None,alpha=0.6)
+        plt.scatter(x, y, label=species[i],alpha=0.6)
         if i == 0:
             plt.plot(curr_T, reaction_rates_current[i], '^r',label='Current Temperature',markersize=12)
         else:
