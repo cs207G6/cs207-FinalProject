@@ -202,6 +202,10 @@ class TempEvoPlot(Resource):
 class WebServer:
     """
     chemkin web server class
+
+    Examples
+    --------
+    >>> ws = WebServer(8080)
     """
 
     def __init__(self, port):
