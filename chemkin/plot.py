@@ -103,7 +103,7 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
 
     Returns
     -------
-    png_str:                string
+    encoded_png:            string
                             the base64-encoded png image of the progress rates vs temperature plot
 
     Examples
@@ -178,7 +178,7 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
 
     Returns
     -------
-    png_str:                string
+    encoded_png:            string
                             the base64-encoded png image of the reaction rates vs temperature plot
 
     Examples
