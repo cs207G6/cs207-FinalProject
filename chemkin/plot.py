@@ -57,7 +57,7 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
         >>> current_T = 150
         >>> pic_width = 0.1
         >>> pic_length = 0.1
-        (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
+        >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
     """
 
     reaction_data = user_data
