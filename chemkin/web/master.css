@@ -6,7 +6,47 @@ body {
     background-repeat: repeat;
     background-color:rgba(0, 0, 0, 0.5);
 }
-
+#top {
+    display: flex;
+    align-items: center;
+    margin: 0 6%;
+    margin-bottom: 24px;
+    padding: 34px 0 29px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+#top nav#top-nav-extra a {
+    background: #2d80ec;
+    color: #fff;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 28px;
+    border-radius: 32px;
+    padding: 2px 18px;
+}
+#top nav#top-nav-main {
+    margin-left: auto;
+}
+#top nav li {
+    font-size: 16px;
+    margin-left: 34px;
+}
+#top nav a {
+    color: #2d80ec;
+    text-decoration: none;
+}
+#top ul {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+#top-brand span, #top-brand a {
+    display: block;
+    font-size: 17px;
+    font-weight: 900;
+    color: #2d80ec;
+    text-decoration: none;
+    text-transform: uppercase;
+}
 .form-item label{
     font-weight: bold; 
 }
