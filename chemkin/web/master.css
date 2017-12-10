@@ -23,7 +23,21 @@ body {
     border-radius: 32px;
     padding: 2px 18px;
 }
+
+#top nav#top-nav-extra-time a {
+    background: #2d80ec;
+    color: #fff;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 28px;
+    border-radius: 32px;
+    padding: 2px 18px;
+}
 #top nav#top-nav-main {
+    margin-left: auto;
+}
+
+#top nav#top-nav-extra-time {
     margin-left: auto;
 }
 #top nav li {
