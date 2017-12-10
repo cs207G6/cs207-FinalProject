@@ -1,5 +1,6 @@
 from chemkin.reaction import *
 from chemkin.rate_coeff import *
+import xml.etree.ElementTree as ET
 
 
 class DataParser:
@@ -14,12 +15,12 @@ class DataParser:
         """
         Parse 'rateCoeff' element and return RateCoeff
 
-        Arguments
+        Parameters
         ----------
         root: Element
             rateCoeff Element
 
-        Return
+        Returns
         ----------
         RateCoeff
             RateCoeff object
@@ -50,12 +51,12 @@ class DataParser:
         """
         Convert an xml string boolean to python bool
 
-        Arguments
+        Parameters
         ----------
         v: str
             xml string boolean
 
-        Return
+        Returns
         ----------
         bool
             boolean value
@@ -70,12 +71,12 @@ class DataParser:
         """
         Parse 'reactants' or 'products' element and return dictionary of reactants/products
 
-        Arguments
+        Parameters
         ----------
         root: Element
             reactants or products Element
 
-        Return
+        Returns
         ----------
         dict
             a string to float array where keys are name of reactants/products and value being their Stoichiometric coefficients
@@ -92,12 +93,12 @@ class DataParser:
         """
         Parse 'reaction' element and return Reaction
 
-        Arguments
+        Parameters
         ----------
         root: Element
             reaction Element
 
-        Return
+        Returns
         ----------
         Reaction
             Reaction object
@@ -115,17 +116,16 @@ class DataParser:
         """
         Parse a reaction xml file and return ReactionData object
 
-        Arguments
+        Parameters
         ----------
         filename: str
             filename of reaction xml file
 
-        Return
+        Returns
         ----------
         ReactionData
             parsed ReactionData object
         """
-        import xml.etree.ElementTree as ET
         tree = ET.parse(filename)
         id = tree.find("reactionData").get("id")
         species = []
