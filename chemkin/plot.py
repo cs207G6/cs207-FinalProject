@@ -119,7 +119,7 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     >>> current_T = 150
     >>> pic_width = 0.1
     >>> pic_length = 0.1
-    >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
+    >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current,equations)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
     >>> img = progress_rate_plot_generation(temp_range, progress_rates_list, current_T, progress_rates_current, equations,pic_width,pic_length)
     """
 
@@ -194,7 +194,7 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     >>> current_T = 150
     >>> pic_width = 0.1
     >>> pic_length = 0.1
-    >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
+    >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current,equations)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
     >>> img = reaction_rate_plot_generation(temp_range, reaction_rates_list, current_T, reaction_rates_current, species, pic_width,pic_length)
     """
     x = T_range
