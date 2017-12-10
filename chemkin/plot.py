@@ -105,7 +105,7 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
         plt.plot(x, y)
         plt.scatter(x, y, label='Elementary Reaction ' + str(i + 1))
         if i == 0:
-            plt.plot(curr_T, progress_rates_current[i], '^r',label='Current Temperature')
+            plt.plot(curr_T, progress_rates_current[i], '^r', label='Current Temperature')
         else:
             plt.plot(curr_T, progress_rates_current[i], '^r')
     plt.xlabel("Temperature")
@@ -148,7 +148,7 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
         plt.plot(x, y, label=None)
         plt.scatter(x, y, label=species[i])
         if i == 0:
-            plt.plot(curr_T, reaction_rates_current[i], '^r',label='Current Temperature')
+            plt.plot(curr_T, reaction_rates_current[i], '^r', label='Current Temperature')
         else:
             plt.plot(curr_T, reaction_rates_current[i], '^r')
     plt.xlabel("Temperature")
@@ -162,5 +162,3 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     figfile.seek(0)  # rewind to beginning of file
     figdata_png = base64.b64encode(figfile.getvalue())
     return figdata_png.decode('utf8')
-
-

@@ -10,60 +10,55 @@ class ModifiedArrhenius(RateCoeff):
     """
     Calculate the rate coefficient for Modified Arrhenius Reaction
 
-    ARGUMENTS:
-    ==========
-    b = modified arrhenius prefactor
-        float
-    a = arrhenius prefactor
-        must be positive float
-    E =  activation energy
-        float
-    R = ideal gas constant (optional; default 8.314)
-        must be positive
-
-    ATTRIBUTES:
-    ===========
-    b = modified arrhenius prefactor
-        float
-    a = arrhenius prefactor
-        must be positive float
-    E =  activation energy
-        float
-    R = ideal gas constant (optional; default 8.314)
-        must be positive
+    Attributes
+    ----------
+    b: float
+     modified arrhenius prefactor
+    a: float
+     arrhenius prefactor
+    E: float
+      activation energy
+    R: float
+     ideal gas constant (optional; default 8.314). must be positive
     """
 
     def __init__(self, a, b, E, R=8.314):
+        """
+        Create a new instance of ModifiedArrhenius
+
+        Parameters
+        ----------
+        b: float
+         modified arrhenius prefactor
+        a: float
+         arrhenius prefactor,must be positive float
+        E: float
+          activation energy
+        R: float
+         ideal gas constant (optional; default 8.314). must be positive
+        """
         self.b = b
         self.A = a
         self.E = E
         self.R = R
 
     def get_K(self, T):
-        """Calculates the modified Arrhenius reaction rate coefficient
+        """
+        Calculates the modified Arrhenius reaction rate coefficient
     
-        INPUTS:
-        =======
-        A: float
-           Arrhenius prefactor
-           Must be positive
-        b: float
-           Modified Arrhenius parameter
-        E: float
-           Activation energy
+        Parameters
+        ----------
         T: float
            Temperature
            Must be positive
-        R: float, default value = 8.314
-           Ideal gas constant
-           Must be positive
-        RETURNS:
-        ========
+
+        Returns
+        -------
         k: float
            Modified Arrhenius reaction rate coefficient
 
-        EXAMPLES:
-        ===========
+        Examples
+        --------
         >>> ModifiedArrhenius(10,20,30).get_K(50)
         8.872748484824047e+34
         """

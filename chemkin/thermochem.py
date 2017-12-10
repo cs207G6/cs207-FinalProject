@@ -1,7 +1,13 @@
+# this file is provided by courtesy of David Sondak
+
 import numpy as np
 
 
 class ThermochemRXNSetWrapper:
+    """
+    This is the data structure used by ThermoChem
+    """
+
     def __init__(self, nasa):
         self.nasa7_coeffs = nasa
 
@@ -79,15 +85,3 @@ class ThermoChem:
         kb = fact ** gamma * np.exp(delta_G_over_RT)
 
         return kf / kb
-
-        # def Cp_over_R(self, T):
-        #     # WARNING:  This line will depend on your own data structures!
-        #     # Be careful to get the correct coefficients for the appropriate
-        #     # temperature range.  That is, for T <= Tmid get the low temperature
-        #     # range coeffs and for T > Tmid get the high temperature range coeffs.
-        #     a = self.rxnset.nasa7_coeffs
-        #
-        #     Cp_R = (a[:, 0] + a[:, 1] * T + a[:, 2] * T ** 2.0
-        #             + a[:, 3] * T ** 3.0 + a[:, 4] * T ** 4.0)
-        #
-        #     return Cp_R

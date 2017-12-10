@@ -9,11 +9,20 @@ matplotlib.use('Agg')
 
 class TimeEvo:
     def __init__(self, file):
+        """
+        Create a TimeEvo instance for plotting temperature evolution
+
+        Parameters
+        ----------
+        file: str
+            path to the hdf5 file
+        """
         self.file = h5py.File(file, 'r')
         self.scenarios = list(self.file.keys())
 
     def plot(self, scenario, pic_width=16, pic_length=10):
         """
+        Returns a base64 encoded image of time temperature evolution of specified scenario
 
         Parameters
         ----------

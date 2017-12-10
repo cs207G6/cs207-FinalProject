@@ -6,6 +6,14 @@ from . import nasa as n
 
 class NASACoeffs:
     def __init__(self, database_file=None):
+        """
+        Create a new instance of NASACoeffs of given database file
+
+        Parameters
+        ----------
+        database_file: str
+            path of the database file (can be non-existent if creating a new db)
+        """
         if database_file is None:
             path = os.path.dirname(n.__file__)
             self.database_file = os.path.join(path, "database", "default.sqlite")
@@ -14,17 +22,12 @@ class NASACoeffs:
 
     def create_db(self, filename):
         """
-        Parse a reaction xml file and return sql database with
+        Parse the given reaction xml file and write to the sql database
             
-        Arguments
+        Parameters
         ----------
         filename: str
-        filename of reaction xml file
-            
-        Return
-        ----------
-        HW10_demo.sqlite
-        database with Nasa coefficient for each species
+                the path of the xml file to be read from
         """
         db = sqlite3.connect(self.database_file)
         # create a cursor object
@@ -90,6 +93,23 @@ class NASACoeffs:
         db.close()
 
     def get_coeffs(self, species_name, temp_range):
+        """
+        Get the nasa coefficients for given species at specified temperature range (low or high)
+
+        Parameters
+        ----------
+        species_name: List[str]
+            The name of the species for which the coefficients to be returned.
+        temp_range: str
+            either 'low' or 'high'. The temperature range of the coefficients to be returned.
+
+        Returns
+        -------
+        tuple
+            a tuple of (coefficients, Tmin, Tmax)
+            coefficients is a numpy array of the coefficients
+            Tmin/Tmax is the min/temperature of given range
+        """
         db = sqlite3.connect(self.database_file)
         cursor = db.cursor()
         # get the coeffs based on temp range

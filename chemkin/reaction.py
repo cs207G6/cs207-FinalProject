@@ -7,20 +7,31 @@ class ReactionData:
     """
     Contains all the data related to the reaction; i.e reaction & progress rate
 
-    ARGUMENTS:
-    ==========
-    id = identifier in xml
-    species = reactants & product
-    reactions: an array of the reactions
-
-    ATTRIBUTES:
-    ===========
-    id = identifier in xml
-    species = reactants & product
-    reactions: an array of the reactions
+    Attributes
+    -----------
+    id: str
+        identifier in xml
+    species: List[str]
+        reactants & product
+    reactions: List[Reaction]
+        an array of the reactions
     """
 
     def __init__(self, id, species, reactions, nasa):
+        """
+        Creates a new instance of reaction data
+
+        Parameters
+        ----------
+        id: str
+            identifier
+        species: List[str]
+            list of reactants & products
+        reactions: List[Reaction]
+            list of reactions
+        nasa: chemkin.nasa.NASACoeffs
+            NASA coefficients
+        """
         self.id = id
         self.reactions = reactions
         self.species = species
@@ -56,10 +67,15 @@ class ReactionData:
                 if k not in species_set:
                     raise ValueError("{} is not in species array.".format(k))
 
-    def __len__(self):
-        return self.J
-
     def get_nu(self):
+        """
+        Get nu (stoichiometric coefficients) for reactants and products
+
+        Returns
+        -------
+        (np.array, np.array)
+            a tuple of (stoichiometric coefficients for reactants, stoichiometric coefficients for products)
+        """
         inv_dict = {v: k for (k, v) in enumerate(self.species)}
         nu_react = np.zeros((self.I, self.J))
         nu_prod = np.zeros((self.I, self.J))
@@ -71,6 +87,21 @@ class ReactionData:
         return nu_react, nu_prod
 
     def get_nasa_coeff(self, species, temp):
+        """
+        Get nasa coefficient for specified species at given temperature
+
+        Parameters
+        ----------
+        species: List[str]
+            list of species for which nasa coefficients to return
+        temp: float
+            temperature at which nasa coefficients to return
+
+        Returns
+        -------
+        np.ndarray
+            nasa coefficients for specified species at given temperature
+        """
         if species not in self.nasa:
             raise NotImplementedError("NASA coefficient for {} is not specified".format(species))
         nasa = self.nasa[species]
@@ -83,6 +114,19 @@ class ReactionData:
         return np.array(nasa_coeff)
 
     def get_nasa_coeff_matrix(self, T):
+        """
+        Get nasa coefficient matrix for all species
+
+        Parameters
+        ----------
+        T: float
+            temperature
+
+        Returns
+        -------
+        np.ndarray
+            nasa coefficient matrix for all species at given temperature
+        """
         inv_dict = {v: k for (k, v) in enumerate(self.species)}
         result = np.zeros((self.I, 7))
         species_set = set()
@@ -109,23 +153,24 @@ class ReactionData:
         return np.array(result)
 
     def get_progress_rate(self, concs, T):
-        """Returns the progress rate of a system of irreversible, elementary reactions
+        """
+        Returns the progress rate of a system of irreversible, elementary reactions
 
-        INPUTS:
-        =======
+        Parameters
+        ----------
         concs:    numpy array of floats
               concentration of species
         T:        numpy array of floats
               temperature
 
-        RETURNS:
-        ========
+        Returns
+        -------
         omega: numpy array of floats
                size: num_reactions
                progress rate of each reaction
 
-        EXAMPLES:
-        ========
+        Examples
+        --------
         >>> from .parser import DataParser
         >>> from .nasa import NASACoeffs
         >>> nasa = NASACoeffs()
@@ -155,7 +200,8 @@ class ReactionData:
         return forward_part - backward_part
 
     def get_reaction_rate(self, progress_rates):
-        """Returns the reaction rate of a system of irreversible, elementary reactions
+        """
+        Returns the reaction rate of a system of irreversible, elementary reactions
 
         INPUTS:
         =======
@@ -182,10 +228,11 @@ class ReactionData:
         return self.__reaction_rate(nu_react, nu_prod, progress_rates)
 
     def __progress_rate(self, nu_react, concs, k):
-        """Returns the progress rate of a system of irreversible, elementary reactions
+        """
+        Returns the progress rate of a system of irreversible, elementary reactions
 
-        INPUTS:
-        =======
+        Parameters
+        ----------
         nu_react: numpy array of floats,
               size: num_species X num_reactions
               stoichiometric coefficients for the reaction
@@ -194,8 +241,8 @@ class ReactionData:
         concs:    numpy array of floats
               concentration of species
 
-        RETURNS:
-        ========
+        Returns
+        -------
         omega: numpy array of floats
                size: num_reactions
                progress rate of each reaction
@@ -216,7 +263,8 @@ class ReactionData:
         return progress
 
     def __reaction_rate(self, nu_react, nu_prod, rj):
-        """Returns the reaction rate of a system of irreversible, elementary reactions
+        """
+        Returns the reaction rate of a system of irreversible, elementary reactions
 
         INPUTS:
         =======
@@ -240,9 +288,30 @@ class ReactionData:
         nu = nu_prod - nu_react
         return np.dot(nu, rj)
 
+    def __len__(self):
+        return self.J
+
 
 class Reaction:
     def __init__(self, id, reversible, type_, reactants, products, rate_coeff):
+        """
+        Create a new instance of reaction data
+
+        Parameters
+        ----------
+        id: str
+            identifier
+        reversible: bool
+            whether the reaction is reversible
+        type_: str
+            type of the reaction, currently only elementary reaction is supported
+        reactants: List[str]
+            list of reactants
+        products: List[str]
+            list of products
+        rate_coeff: chemkin.rate_coeff.RateCoeff
+            rate coefficient data
+        """
         self.id = id
         self.reversible = reversible
         self.type = type_
