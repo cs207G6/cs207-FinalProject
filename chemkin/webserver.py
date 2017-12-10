@@ -38,7 +38,9 @@ class Session(Resource):
             data_parser = chemkin.parser.DataParser()
             # parse the data file and return an instance of ReactionData class
             reaction_data = data_parser.parse_file(os.path.join(folder, "data.xml"), nasa)
-            return {'status': 'success', 'id': sid, 'species': reaction_data.species}
+            return {'status': 'success', 'id': sid,
+                    'species': reaction_data.species,
+                    'equations': [r.equation for r in reaction_data.reactions]}
         except Exception as e:
             return {'status': 'failed', 'reason': 'Failed to parse given xml file ({})'.format(str(e))}
 
