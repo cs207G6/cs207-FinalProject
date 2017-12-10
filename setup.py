@@ -35,9 +35,11 @@ setup(
 
     packages=find_packages(exclude=['data', 'documentation', 'tests']),
 
-    install_requires=['numpy', 'pandas', 'pytest-runner', 'flask', 'flask-jsonpify', 'flask-restful'],
+    install_requires=['numpy', 'pandas', 'pytest-runner', 'flask', 'flask-jsonpify', 'flask-restful', 'h5py',
+                      'matplotlib'],
 
-    tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner', 'flask', 'flask-jsonpify', 'flask-restful'],
+    tests_require=['coverage', 'pytest', 'pytest-cov', 'pytest_runner', 'flask', 'flask-jsonpify', 'flask-restful',
+                   'h5py'],
 
     package_data={
         '': ['example_data/*.xml', 'database/*.sqlite', 'web/*.html', 'web/*.css', 'web/*.js', 'web/*.jpg']

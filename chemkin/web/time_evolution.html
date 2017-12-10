@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chemkin</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Kube CSS -->
+    <link rel="stylesheet" href="kube.css">
+    <link rel="stylesheet" href="master.css">
+    <!-- Kube JS + jQuery are used for some functionality, but are not required for the basic setup -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="kube.js"></script>
+</head>
+<body>
+<div id="bck"></div>
+<div id="title">
+    <h1 class="title">Chemkin Time Evolution Visualization</h1>
+    <p>This project is for visualization of chemkin time evolution data!</p>
+</div>
+<div id="btn">
+    <label class="filebtn">
+        <input id="h5_upload" type="file" required/>
+        <span>Upload .h5</span>
+    </label>
+</div>
+<div id="post_upload">
+    <h3 class="title">Scenarios</h3>
+    <form class="form">
+        <div class="row gutters" id="scenarios">
+        </div>
+    </form>
+
+    <div id="plots">
+        <div>
+            <img src="" id="plot">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    session_id = "NONE";
+
+    function createSession(evt) {
+        //document.getElementById('file_upload_result').innerText = "Uploading";
+        var files = evt.target.files;
+        if (files.length === 0) {
+            return;
+        }
+        var file = files[0];
+
+        var reader = new FileReader();
+
+        // Closure to capture the file information.
+        reader.onload = function (e) {
+            var xml_data = e.target.result;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/timeevosession');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+
+                    var response = JSON.parse(xhr.responseText);
+                    if (response['status'] === 'failed') {
+                        alert(response['reason']);
+                        return;
+                    }
+                    session_id = response['id'];
+                    scenarios = response['scenarios'];
+                    showScenarios();
+                }
+                else {
+                    alert('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            xhr.send(JSON.stringify({"data": xml_data}));
+
+        };
+
+        reader.readAsDataURL(file);
+
+    }
+
+    function showScenarios() {
+        document.getElementById("post_upload").style.display = "block";
+        document.getElementById('scenarios').innerHTML = "";
+        for (var i = 0; i < scenarios.length; i++) {
+
+            var sc = scenarios[i];
+            var wrapper = document.createElement("div");
+            wrapper.className = "col col-2";
+
+            var div = document.createElement("div");
+            div.className = "form-item";
+            var label = document.createElement("label");
+            label.innerHTML = sc + ' <span class="req">*</span>';
+            div.appendChild(label);
+            var input = document.createElement("input");
+            input.id = "scenario_" + sc;
+            input.type = "button";
+            input.value = "Plot";
+            input.addEventListener("click", function (sc) {
+                return function () {
+                    getPlot(sc);
+                }
+            }(sc));
+            div.appendChild(input);
+
+            wrapper.appendChild(div);
+
+            document.getElementById('scenarios').appendChild(wrapper);
+        }
+    }
+
+    function getPlot(scenario) {
+        if (session_id === "NONE") {
+            alert("Must upload xml file first!");
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', '/timeevo/' + session_id + "/" + scenario);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response['status'] === 'failed') {
+                    alert(response['reason']);
+                    return;
+                }
+                document.getElementById('plot').src = "data:image/png;base64, " + response['plot'];
+            }
+            else {
+                alert('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send();
+    }
+
+    document.getElementById('h5_upload').addEventListener('change', createSession, false);
+
+
+</script>
+
+</body>
+</html>

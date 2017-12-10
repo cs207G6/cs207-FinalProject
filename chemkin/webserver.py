@@ -6,8 +6,11 @@ from flask import Flask, request, send_from_directory
 from flask.ext.jsonpify import jsonify
 from flask_restful import Resource, Api
 
+import base64
+
 import chemkin.nasa
 import chemkin.parser
+from chemkin.time_evo import TimeEvo
 from . import webserver as ws
 
 import chemkin.plot
@@ -108,6 +111,33 @@ class Plots(Resource):
             return {'status': 'failed', 'reason': 'Failed to get plots ({})'.format(str(e))}
 
 
+class TempEvoSession(Resource):
+    def post(self):
+        sid = str(uuid.uuid1())
+        data = request.json['data']
+        data_decoded = base64.b64decode(data[13:])
+        folder = "/tmp/chemkin/webserver/{}".format(sid)
+        os.makedirs(folder, exist_ok=True)
+        with open(os.path.join(folder, "data.h5"), "wb") as f:
+            f.write(data_decoded)
+        try:
+            timeevo = TimeEvo(os.path.join(folder, "data.h5"))
+            return {'status': 'success', 'id': sid, 'scenarios': timeevo.scenarios}
+        except Exception as e:
+            return {'status': 'failed', 'reason': 'Failed to load given hdf5 file ({})'.format(str(e))}
+
+
+class TempEvoPlot(Resource):
+    def get(self, sid, scenario):
+        folder = "/tmp/chemkin/webserver/{}".format(sid)
+        try:
+            timeevo = TimeEvo(os.path.join(folder, "data.h5"))
+            result = timeevo.plot(scenario)
+            return {'status': 'success', 'plot': result}
+        except Exception as e:
+            return {'status': 'failed', 'reason': 'Failed to plot given hdf5 file ({})'.format(str(e))}
+
+
 class WebServer:
     def __init__(self, port):
         self.port = port
@@ -116,6 +146,8 @@ class WebServer:
         self.api.add_resource(Session, '/session')
         self.api.add_resource(Rates, '/rates/<sid>')
         self.api.add_resource(Plots, '/plots/<sid>/<tlow>/<thigh>')
+        self.api.add_resource(TempEvoSession, '/timeevosession')
+        self.api.add_resource(TempEvoPlot, '/timeevo/<sid>/<scenario>')
         path = os.path.dirname(ws.__file__)
         self.web_folder = os.path.join(path, "web")
 
