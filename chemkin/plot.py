@@ -50,7 +50,7 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
         >>> from .nasa import NASACoeffs
         >>> nasa = NASACoeffs() 
         >>> data_parser = DataParser() 
-        >>> user_data = data_parser.parse_file('example_data/rxns.xml', nasa)
+        >>> user_data = data_parser.parse_file('chemkin/example_data/rxns.xml', nasa)
         >>> input_concentration = [10,30,30,40,50,60]
         >>> lower_T = 1000
         >>> upper_T = 2000
