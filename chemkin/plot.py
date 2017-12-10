@@ -1,7 +1,3 @@
-# coding: utf-8
-
-# In[1]:
-
 import base64
 from io import BytesIO
 

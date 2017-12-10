@@ -19,6 +19,13 @@ import chemkin.plot
 
 class Session(Resource):
     def post(self):
+        """
+        Create a new session
+
+        Returns
+        -------
+        response containing session id and species list (if succeed) or failure information (if failed)
+        """
         sid = str(uuid.uuid1())
         data = request.json['data']
         print(data)
@@ -38,6 +45,18 @@ class Session(Resource):
 
 class Rates(Resource):
     def post(self, sid):
+        """
+        Returns progress and reaction rates given session of given temperature
+
+        Parameters
+        ----------
+        sid: str
+            session id
+
+        Returns
+        -------
+        response containing reaction and progress rates (if succeed) or failure information (if failed)
+        """
         folder = "/tmp/chemkin/webserver/{}".format(sid)
         nasa = chemkin.nasa.NASACoeffs()
         # create a data parser class
@@ -70,6 +89,22 @@ class Rates(Resource):
 
 class Plots(Resource):
     def post(self, sid, tlow, thigh):
+        """
+        Returns progress and reaction rate plot for given session of given temperature range
+
+        Parameters
+        ----------
+        sid: str
+            session id
+        tlow: str or float
+            lower bound of temperature
+        thigh:
+            upper bound of temperature
+
+        Returns
+        -------
+        response containing base64 encoded plots (reaction and progress) (if succeed) or failure information (if failed)
+        """
         folder = "/tmp/chemkin/webserver/{}".format(sid)
         nasa = chemkin.nasa.NASACoeffs()
         # create a data parser class
@@ -116,6 +151,13 @@ class Plots(Resource):
 
 class TempEvoSession(Resource):
     def post(self):
+        """
+        Create a new temperature evolution plotting service session
+
+        Returns
+        -------
+        response containing session id and scenario list (if succeed) or failure information (if failed)
+        """
         sid = str(uuid.uuid1())
         data = request.json['data']
         data_decoded = base64.b64decode(data[13:])
@@ -132,6 +174,20 @@ class TempEvoSession(Resource):
 
 class TempEvoPlot(Resource):
     def get(self, sid, scenario):
+        """
+        Implements plotting service for time evolution
+
+        Parameters
+        ----------
+        sid: str
+            session id
+        scenario: str
+            scenario name
+
+        Returns
+        -------
+        response containing base64 encoded plot (if succeed) or failure information (if failed)
+        """
         folder = "/tmp/chemkin/webserver/{}".format(sid)
         try:
             timeevo = TimeEvo(os.path.join(folder, "data.h5"))
@@ -142,7 +198,19 @@ class TempEvoPlot(Resource):
 
 
 class WebServer:
+    """
+    chemkin web server class
+    """
+
     def __init__(self, port):
+        """
+        Create a new instance of chemkin web server
+
+        Parameters
+        ----------
+        port: int
+            port the server will be listening to
+        """
         self.port = port
         self.app = Flask("chemkin web server")
         self.api = Api(self.app)
@@ -155,6 +223,10 @@ class WebServer:
         self.web_folder = os.path.join(path, "web")
 
     def start(self):
+        """
+        Start the server and listen on specified port
+        """
+
         @self.app.route('/<path:path>')
         def send_static(path):
             return send_from_directory(self.web_folder, path)

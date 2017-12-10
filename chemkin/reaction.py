@@ -141,9 +141,39 @@ class ReactionData:
         return result
 
     def get_k(self, T):
+        """
+        Get reaction coefficients for all reactions
+
+        Parameters
+        ----------
+        T: float
+            current temperature
+
+        Returns
+        -------
+        np.ndarray
+            reaction coefficients for all reactions
+        """
         return np.array([reaction.rate_coeff.get_K(T) for reaction in self.reactions])
 
     def get_kb(self, kf, nu, T):
+        """
+        Get backward reaction coefficients for all reactions
+
+        Parameters
+        ----------
+        kf: np.ndarray
+            forward reaction coefficients for all reactions
+        nu: np.ndarray
+            stoichiometric coefficients for reactions (products - reactants)
+        T: float
+            current temperature
+
+        Returns
+        -------
+        np.ndarray
+            backward reaction coefficients for all reactions
+        """
         nasa = self.get_nasa_coeff_matrix(T)
         tc = thermochem.ThermoChem(thermochem.ThermochemRXNSetWrapper(nasa), T)
         result = [0] * len(self.reactions)
@@ -154,18 +184,18 @@ class ReactionData:
 
     def get_progress_rate(self, concs, T):
         """
-        Returns the progress rate of a system of irreversible, elementary reactions
+        Returns the progress rate of a system of elementary reactions
 
         Parameters
         ----------
-        concs:    numpy array of floats
+        concs: array-like
               concentration of species
-        T:        numpy array of floats
+        T: array-like
               temperature
 
         Returns
         -------
-        omega: numpy array of floats
+        np.ndarray
                size: num_reactions
                progress rate of each reaction
 
@@ -201,19 +231,20 @@ class ReactionData:
 
     def get_reaction_rate(self, progress_rates):
         """
-        Returns the reaction rate of a system of irreversible, elementary reactions
+        Returns the reaction rate of a system of elementary reactions
 
-        INPUTS:
-        =======
-        progress_rates: numpy array of floats,
-              size: num_species X num_reactions
+        Parameters
+        ----------
+        progress_rates: np.ndarray
+                progress rates of the reactions
+                size: num_species X num_reactions
 
-        RETURNS:
-        ========
-        array: reaction rate of each specie
+        Returns
+        -------
+        array: reaction rate of each species
 
-        EXAMPLES:
-        ========
+        Examples
+        --------
         >>> from .parser import DataParser
         >>> from .nasa import NASACoeffs
         >>> nasa = NASACoeffs()
@@ -229,21 +260,21 @@ class ReactionData:
 
     def __progress_rate(self, nu_react, concs, k):
         """
-        Returns the progress rate of a system of irreversible, elementary reactions
+        Returns the progress rate of a system of elementary reactions
 
         Parameters
         ----------
-        nu_react: numpy array of floats,
+        nu_react: np.ndarray
               size: num_species X num_reactions
               stoichiometric coefficients for the reaction
-        k:        array of floats
-              Reaction rate coefficient for the reaction
-        concs:    numpy array of floats
+        concs: array-like
               concentration of species
+        k: array-like
+              Reaction rate coefficient for the reaction
 
         Returns
         -------
-        omega: numpy array of floats
+        np.ndarray
                size: num_reactions
                progress rate of each reaction
         """
@@ -264,24 +295,22 @@ class ReactionData:
 
     def __reaction_rate(self, nu_react, nu_prod, rj):
         """
-        Returns the reaction rate of a system of irreversible, elementary reactions
+        Returns the reaction rate of a system of elementary reactions
 
-        INPUTS:
-        =======
-        nu_react: numpy array of floats,
+        Parameters
+        ----------
+        nu_react: np.ndarray
               size: num_species X num_reactions
               stoichiometric coefficients for the reactants
-        nu_prod:  numpy array of floats,
+        nu_prod:  np.ndarray
               size: num_species X num_reactions
               stoichiometric coefficients for the products
-        k:        float, default value is 10,
-              Reaction rate coefficient for the reaction
-        concs:    numpy array of floats
-              concentration of species
+        rj:    np.ndarray
+            progress rates for the reactions
 
-        RETURNS:
-        ========
-        f: numpy array of floats
+        Returns
+        -------
+        np.ndarray
            size: num_species
            reaction rate of each specie
         """
