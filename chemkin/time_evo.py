@@ -1,7 +1,7 @@
 import base64
 
 import h5py
-import matplotlib.pyplot as plt
+import matplotlib
 from io import BytesIO
 
 
@@ -11,6 +11,8 @@ class TimeEvo:
         self.scenarios = list(self.file.keys())
 
     def plot(self, scenario, pic_width=16, pic_length=10):
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
         """
 
         Parameters
