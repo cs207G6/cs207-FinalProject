@@ -10,7 +10,7 @@ import numpy as np
 
 
 def range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T):
-    """Returns the base64-encoded plot for progress rates of multiple elementary reacitons vs temperature range
+    """Returns all processed data required for the progress/reaction rates plots
 
         INPUTS:
         =======
@@ -80,11 +80,46 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
 
 def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current, pic_width,
                                   pic_length):
+    """Returns the base64-encoded plot for progress rates of all elementary reacitons vs temperature range
+
+        INPUTS:
+        =======
+        T_range:                python list of 100 floats
+                                100 temperatures evenly spaced within the given temperature range
+        progress_rates_range:   python list of  100 numpy arrays
+                                100 progress rate arrays for 100 temperatures to be plotted respectively. Each array contains n floats 
+                                where n is the number of elementary reactions in the given system
+        current_T:              float or integer
+                                The temperature of the current reaction
+        progress_rates_current: numpy array
+                                the progress rates for all elementary reactions of at the given current temperature
+        pic_width:              float
+                                the desired width of the output plot image(pixel/dpi)
+        pic_length:             float
+                                the desired lengthth of the output plot image(pixel/dpi)                       
+        
+        RETURNS:
+        ========
+        png_str:                string
+                                the base64-encoded png image of the progress rates vs temperature plot
+
+        EXAMPLES:
+        ========
+        >>> from .parser import DataParser
+        >>> from .nasa import NASACoeffs
+        >>> nasa = NASACoeffs() 
+        >>> data_parser = DataParser() 
+        >>> user_data = data_parser.parse_file('chemkin/example_data/rxns.xml', nasa)
+        >>> input_concentration = [10,30,30,40,50,60]
+        >>> lower_T = 1000
+        >>> upper_T = 2000
+        >>> current_T = 150
+        >>> pic_width = 0.1
+        >>> pic_length = 0.1
+        >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
+        >>> img = progress_rate_plot_generation(temp_range, progress_rates_list, current_T, progress_rates_current, pic_width,pic_length)
     """
-    T_range: range of temperature indicated by user/as default
-    progress_rate_range: calculated from range_data_collection function
-    current_T: The temperature of the current reaction
-    """
+
     x = T_range
     curr_T = current_T
 
@@ -118,15 +153,52 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     plt.savefig(figfile, format='png')
     figfile.seek(0)  # rewind to beginning of file
     figdata_png = base64.b64encode(figfile.getvalue())
-    return figdata_png.decode('utf8')
+    png_str = figdata_png.decode('utf8')
+    return png_str
 
 
 def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, reaction_rates_current, species, pic_width,
                                   pic_length):
-    """
-    T_range: range of temperature indicated by user/as default
-    reaction_rate_range: calculated from range_data_collection function
-    current_T: The temperature of the current reaction
+    """Returns the base64-encoded plot for reaction rates of all species vs temperature range
+
+        INPUTS:
+        =======
+        T_range:                python list of 100 floats
+                                100 temperatures evenly spaced within the given temperature range
+        reaction_rates_range:   python list of  100 numpy arrays
+                                100 reaction rate arrays for 100 temperatures to be plotted respectively. Each array contains n floats 
+                                where n is the number of species in the given system
+        current_T:              float or integer
+                                The temperature of the current reaction
+        reaction_rates_current: numpy array
+                                the reaction rates for all species of at the given current temperature
+        species:                python list of strings
+                                names of all species in the given system
+        pic_width:              float
+                                the desired width of the output plot image(pixel/dpi)
+        pic_length:             float
+                                the desired length of the output plot image(pixel/dpi)                     
+        
+        RETURNS:
+        ========
+        png_str:                string
+                                the base64-encoded png image of the reaction rates vs temperature plot
+
+        EXAMPLES:
+        ========
+        >>> from .parser import DataParser
+        >>> from .nasa import NASACoeffs
+        >>> nasa = NASACoeffs() 
+        >>> data_parser = DataParser() 
+        >>> user_data = data_parser.parse_file('chemkin/example_data/rxns.xml', nasa)
+        >>> input_concentration = [10,30,30,40,50,60]
+        >>> lower_T = 1000
+        >>> upper_T = 2000
+        >>> current_T = 150
+        >>> pic_width = 0.1
+        >>> pic_length = 0.1
+        >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
+        >>> img = reaction_rate_plot_generation(temp_range, reaction_rates_list, current_T, reaction_rates_current, species, pic_width,pic_length)
     """
     x = T_range
     curr_T = current_T
@@ -161,6 +233,7 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     plt.savefig(figfile, format='png')
     figfile.seek(0)  # rewind to beginning of file
     figdata_png = base64.b64encode(figfile.getvalue())
-    return figdata_png.decode('utf8')
+    png_str = figdata_png.decode('utf8')
+    return png_str
 
 
