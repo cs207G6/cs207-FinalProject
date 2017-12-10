@@ -295,11 +295,11 @@
                 }
                 if (mode === "reaction") {
                     document.getElementById('progress_rate_plot').src = "";
-                    document.getElementById('reaction_rate_plot').src = "data:image/png;base64, " + response['progress_rates'];
+                    document.getElementById('reaction_rate_plot').src = "data:image/png;base64, " + response['reaction_rates'];
                 }
                 else if (mode === "progress") {
                     document.getElementById('reaction_rate_plot').src = "";
-                    document.getElementById('progress_rate_plot').src = "data:image/png;base64, " + response['reaction_rates'];
+                    document.getElementById('progress_rate_plot').src = "data:image/png;base64, " + response['progress_rates'];
                 }
             }
             else {
