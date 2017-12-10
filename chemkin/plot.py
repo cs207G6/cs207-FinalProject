@@ -75,10 +75,10 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
 
     progress_rates_current = reaction_data.get_progress_rate(concentration, current_T)
     reaction_rates_current = reaction_data.get_reaction_rate(progress_rates_current)
-    return temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current,equations
+    return temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current, equations
 
 
-def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current,equations, pic_width,
+def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current, equations, pic_width,
                                   pic_length):
     """
     Returns the base64-encoded plot for progress rates of all elementary reacitons vs temperature range

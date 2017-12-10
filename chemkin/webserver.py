@@ -125,13 +125,14 @@ class Plots(Resource):
 
             T = float(request.json['_temp'])
 
-            T_range, progress_rate_range, reaction_rate_range, current_T, species, pc, rc = chemkin.plot.range_data_collection(
+            T_range, progress_rate_range, reaction_rate_range, current_T, species, pc, rc, equations = chemkin.plot.range_data_collection(
                 reaction_data, conc, tlow, thigh, T)
 
             pic_width = 1200 // 75
             pic_length = 800 // 75
 
             progress_plot = chemkin.plot.progress_rate_plot_generation(T_range, progress_rate_range, current_T, pc,
+                                                                       equations,
                                                                        pic_width,
                                                                        pic_length)
 
@@ -161,15 +162,13 @@ class TempEvoSession(Resource):
         response containing session id and scenario list (if succeed) or failure information (if failed)
         """
         sid = str(uuid.uuid1())
-        data = request.json['data']
-        data_decoded = base64.b64decode(data[13:])
+        data_decoded = base64.b64decode(request.json['data'][13:])
         folder = "/tmp/chemkin/webserver/{}".format(sid)
         os.makedirs(folder, exist_ok=True)
         with open(os.path.join(folder, "data.h5"), "wb") as f:
             f.write(data_decoded)
         try:
-            timeevo = TimeEvo(os.path.join(folder, "data.h5"))
-            return {'status': 'success', 'id': sid, 'scenarios': timeevo.scenarios}
+            return {'status': 'success', 'id': sid, 'scenarios': TimeEvo(os.path.join(folder, "data.h5")).scenarios}
         except Exception as e:
             return {'status': 'failed', 'reason': 'Failed to load given hdf5 file ({})'.format(str(e))}
 
@@ -190,11 +189,9 @@ class TempEvoPlot(Resource):
         -------
         response containing base64 encoded plot (if succeed) or failure information (if failed)
         """
-        folder = "/tmp/chemkin/webserver/{}".format(sid)
         try:
-            timeevo = TimeEvo(os.path.join(folder, "data.h5"))
-            result = timeevo.plot(scenario)
-            return {'status': 'success', 'plot': result}
+            timeevo = TimeEvo(os.path.join("/tmp/chemkin/webserver/{}".format(sid), "data.h5"))
+            return {'status': 'success', 'plot': timeevo.plot(scenario)}
         except Exception as e:
             return {'status': 'failed', 'reason': 'Failed to plot given hdf5 file ({})'.format(str(e))}
 
