@@ -109,8 +109,9 @@ class DataParser:
         id = root.get('id')
         reactants = self._get_reactants(root.find('reactants'))
         products = self._get_reactants(root.find('products'))
+        equation = root.find('equation').text.strip()
         return Reaction(id, reversible=reversible, type_=type_, reactants=reactants, products=products,
-                        rate_coeff=rate_coeff)
+                        rate_coeff=rate_coeff, equation=equation)
 
     def parse_file(self, filename, nasa):
         """

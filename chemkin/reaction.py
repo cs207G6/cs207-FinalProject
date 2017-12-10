@@ -322,7 +322,7 @@ class ReactionData:
 
 
 class Reaction:
-    def __init__(self, id, reversible, type_, reactants, products, rate_coeff):
+    def __init__(self, id, reversible, type_, reactants, products, rate_coeff, equation):
         """
         Create a new instance of reaction data
 
@@ -340,6 +340,8 @@ class Reaction:
             list of products
         rate_coeff: chemkin.rate_coeff.RateCoeff
             rate coefficient data
+        equation: str
+            equation string
         """
         self.id = id
         self.reversible = reversible
@@ -347,3 +349,4 @@ class Reaction:
         self.reactants = reactants
         self.products = products
         self.rate_coeff = rate_coeff
+        self.equation = equation
