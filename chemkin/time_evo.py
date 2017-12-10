@@ -4,8 +4,6 @@ import h5py
 import matplotlib
 from io import BytesIO
 
-matplotlib.use('Agg')
-
 
 class TimeEvo:
     def __init__(self, file):
@@ -35,6 +33,7 @@ class TimeEvo:
         >>> time_evo.plot(time_evo.scenarios[0], 0.1, 0.1)
         'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAPYQAAD2EBqD+naQAAANJJREFUGJWFkDFOw0AQRZ+XtSxZ2m1oseg4AU0OgMQJ0tBt4dNQpqHmGG4pKGjjCwxyk8q7JFIIm6EIcUEiGGmKP3oavZki56zDMOCcoygKfpeqklICEVHg37bOOQBEhPcPZf70CsD89gqA7WbNor3DppQA8N5T5i9MVXN9WfP4MAMgxsiiBdM0zeSz3e0BqKw5cTUiMoXPfADLizOg934Ke9XD8Mz1NsYIQPv8xnK1+wFPOOzR8WUpmKqmKg33Nw3HBeM4EkKAvu///F8IQbuu028NBl10rRrWqQAAAABJRU5ErkJggg=='
         """
+        matplotlib.use('Agg')
         import matplotlib.pyplot as plt
         data = self.file[scenario + '/truth']
         time = self.file[scenario + '/time']
