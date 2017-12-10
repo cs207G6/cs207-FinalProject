@@ -40,6 +40,8 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
                             the progress rates for all elementary reactions of at the given current temperature
     reaction_rates_current: numpy array
                             the reaction rates for all species of at the given current temperature
+    equations:              python list of strings
+                            the reaction equations of all elementary reactions in the given system
 
     Examples
     --------
@@ -59,6 +61,7 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
 
     reaction_data = user_data
     species = reaction_data.species
+    equations = [reaction.equation for reaction in reaction_data.reactions]
     concentration = input_concentration
     temp_range = list(np.linspace(lower_T, upper_T, num=100))
     progress_rates_list = [None] * len(temp_range)
@@ -72,10 +75,10 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
 
     progress_rates_current = reaction_data.get_progress_rate(concentration, current_T)
     reaction_rates_current = reaction_data.get_reaction_rate(progress_rates_current)
-    return temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current
+    return temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current,equations
 
 
-def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current, pic_width,
+def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current,equations, pic_width,
                                   pic_length):
     """
     Returns the base64-encoded plot for progress rates of all elementary reacitons vs temperature range
@@ -91,6 +94,8 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
                             The temperature of the current reaction
     progress_rates_current: numpy array
                             the progress rates for all elementary reactions of at the given current temperature
+    equations:              python list of strings
+                            the reaction equations of all elementary reactions in the given system
     pic_width:              float
                             the desired width of the output plot image(pixel/dpi)
     pic_length:             float
@@ -129,7 +134,7 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
         # generate a curve for each elementary reaction
         y = [e[i] for e in progress_rate_range]
         plt.plot(x, y, alpha=0.6)
-        plt.scatter(x, y, label='Elementary Reaction ' + str(i + 1), alpha=0.6)
+        plt.scatter(x, y, label=equations[i], alpha=0.6)
         if i == 0:
             plt.plot(curr_T, progress_rates_current[i], '^r', label='Current Temperature', markersize=12)
         else:
