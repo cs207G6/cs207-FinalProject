@@ -78,16 +78,17 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
     return temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current, equations
 
 
-def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current, equations, pic_width,
+def progress_rate_plot_generation(temp_range, progress_rates_list, current_T, progress_rates_current, equations,
+                                  pic_width,
                                   pic_length):
     """
     Returns the base64-encoded plot for progress rates of all elementary reacitons vs temperature range
 
     Parameters
     ----------
-    T_range:                python list of 100 floats
+    temp_range:                python list of 100 floats
                             100 temperatures evenly spaced within the given temperature range
-    progress_rate_range:   python list of  100 numpy arrays
+    progress_rates_list:   python list of  100 numpy arrays
                             100 progress rate arrays for 100 temperatures to be plotted respectively. Each array contains n floats
                             where n is the number of elementary reactions in the given system
     current_T:              float or integer
@@ -123,16 +124,16 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     >>> img = progress_rate_plot_generation(temp_range, progress_rates_list, current_T, progress_rates_current, equations,pic_width,pic_length)
     """
 
-    x = T_range
+    x = temp_range
     curr_T = current_T
 
     # generate plot
     plt.figure(figsize=(pic_width, pic_length))
 
-    reaction_num = len(progress_rate_range[0])
+    reaction_num = len(progress_rates_list[0])
     for i in range(reaction_num):
         # generate a curve for each elementary reaction
-        y = [e[i] for e in progress_rate_range]
+        y = [e[i] for e in progress_rates_list]
         plt.plot(x, y, alpha=0.6)
         plt.scatter(x, y, label=equations[i], alpha=0.6)
         if i == 0:
@@ -153,16 +154,17 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     return encoded_png
 
 
-def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, reaction_rates_current, species, pic_width,
+def reaction_rate_plot_generation(temp_range, reaction_rates_list, current_T, reaction_rates_current, species,
+                                  pic_width,
                                   pic_length):
     """
     Returns the base64-encoded plot for reaction rates of all species vs temperature range
 
     Parameters
     ----------
-    T_range:                python list of 100 floats
+    temp_range:                python list of 100 floats
                             100 temperatures evenly spaced within the given temperature range
-    reaction_rate_range:   python list of  100 numpy arrays
+    reaction_rates_list:   python list of  100 numpy arrays
                             100 reaction rate arrays for 100 temperatures to be plotted respectively. Each array contains n floats
                             where n is the number of species in the given system
     current_T:              float or integer
@@ -197,16 +199,16 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     >>> (temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current,equations)=range_data_collection(user_data, input_concentration, lower_T, upper_T, current_T)
     >>> img = reaction_rate_plot_generation(temp_range, reaction_rates_list, current_T, reaction_rates_current, species, pic_width,pic_length)
     """
-    x = T_range
+    x = temp_range
     curr_T = current_T
 
     # generate plot
     plt.figure(figsize=(pic_width, pic_length))
 
-    species_num = len(reaction_rate_range[0])
+    species_num = len(reaction_rates_list[0])
     for i in range(species_num):
         # generate a curve for each elementary reaction
-        y = [e[i] for e in reaction_rate_range]
+        y = [e[i] for e in reaction_rates_list]
         plt.plot(x, y, label=None, alpha=0.6)
         plt.scatter(x, y, label=species[i], alpha=0.6)
         if i == 0:
