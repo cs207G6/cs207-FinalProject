@@ -104,8 +104,8 @@ class Plots(Resource):
 
             return {
                 "status": "success",
-                'progress_rates': reaction_plot,
-                'reaction_rates': progress_plot
+                'progress_rates': progress_plot,
+                'reaction_rates': reaction_plot
             }
         except Exception as e:
             return {'status': 'failed', 'reason': 'Failed to get plots ({})'.format(str(e))}

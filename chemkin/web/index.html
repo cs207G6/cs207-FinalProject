@@ -19,16 +19,17 @@
     <div id="top-brand">
         <a href="/">CS207 Project</a>
     </div>
-    <nav id="top-nav-main"><ul>
-        <li><a href="time_evolution.html">Time Evolution</a></li>
-        <li >
-            <div>
-                <label class="navbtn">
-                    <input id = "xml_upload" type="file" required/>
-                    <span>Upload .xml</span>
-                </label>
-            </div>
-        </li>
+    <nav id="top-nav-main">
+        <ul>
+            <li><a href="time_evolution.html">Time Evolution</a></li>
+            <li>
+                <div>
+                    <label class="navbtn">
+                        <input id="xml_upload2" type="file" required/>
+                        <span>Upload .xml</span>
+                    </label>
+                </div>
+            </li>
         </ul>
     </nav>
     <nav id="top-nav-extra">
@@ -36,7 +37,7 @@
             <li><a href="/documentation/">Documentation</a></li>
         </ul>
     </nav>
-</div>    
+</div>
 <div id="title">
     <h1 class="title">Chemkin & Some Title</h1>
     <p>This project is for CS207 put a description here!</p>
@@ -140,7 +141,6 @@
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    console.log(xhr.responseText);
                     //document.getElementById('file_upload_result').innerText = "Uploaded";
                     var response = JSON.parse(xhr.responseText);
                     if (response['status'] === 'failed') {
@@ -192,7 +192,8 @@
         }
     }
 
-    function getRates() {
+    function getRates(evt) {
+        evt.preventDefault();
         document.getElementById('plots').style.display = "none";
 
         if (session_id === "NONE") {
@@ -229,15 +230,25 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log(xhr.responseText);
                 var response = JSON.parse(xhr.responseText);
                 if (response['status'] === 'failed') {
                     alert(response['reason']);
                     return;
                 }
                 document.getElementById('rates').style.display = "block";
-                document.getElementById('progress_rates').innerText = response['progress_rates'];
-                document.getElementById('reaction_rates').innerText = response['reaction_rates'];
+                last_result = response['progress_rates'];
+                var progress_rates_result = "";
+                for (var i in response['progress_rates']) {
+                    progress_rates_result += "Reaction " + i.toString() + ": " + response['progress_rates'][i] + "\n";
+                }
+
+                var reaction_rates_result = "";
+                for (var i in response['reaction_rates']) {
+                    reaction_rates_result += species[i] + ": " + response['reaction_rates'][i] + "\n";
+                }
+
+                document.getElementById('progress_rates').innerText = progress_rates_result;
+                document.getElementById('reaction_rates').innerText = reaction_rates_result;
             }
             else {
                 alert('Request failed.  Returned status of ' + xhr.status);
@@ -277,7 +288,6 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log(xhr.responseText);
                 var response = JSON.parse(xhr.responseText);
                 if (response['status'] === 'failed') {
                     alert(response['reason']);
@@ -285,11 +295,11 @@
                 }
                 if (mode === "reaction") {
                     document.getElementById('progress_rate_plot').src = "";
-                    document.getElementById('reaction_rate_plot').src = "data:image/png;base64, " + response['progress_rates'];
+                    document.getElementById('reaction_rate_plot').src = "data:image/png;base64, " + response['reaction_rates'];
                 }
                 else if (mode === "progress") {
                     document.getElementById('reaction_rate_plot').src = "";
-                    document.getElementById('progress_rate_plot').src = "data:image/png;base64, " + response['reaction_rates'];
+                    document.getElementById('progress_rate_plot').src = "data:image/png;base64, " + response['progress_rates'];
                 }
             }
             else {
@@ -300,25 +310,30 @@
     }
 
     document.getElementById('xml_upload').addEventListener('change', createSession, false);
-    document.getElementById('get_rates').addEventListener('click', getRates, false);
+    document.getElementById('xml_upload2').addEventListener('change', createSession, false);
 
-    function show_temp_range_for_reaction_rate() {
+    function show_temp_range_for_reaction_rate(evt) {
+        evt.preventDefault();
         plot_mode = "reaction";
         document.getElementById('plots').style.display = "block";
         document.getElementById('reaction_rate_plot').src = "";
         document.getElementById('progress_rate_plot').src = "";
         document.getElementById('rates').style.display = "none";
+        return false;
     }
 
-    function show_temp_range_for_progress_rate() {
+    function show_temp_range_for_progress_rate(evt) {
+        evt.preventDefault();
         plot_mode = "progress";
         document.getElementById('plots').style.display = "block";
         document.getElementById('reaction_rate_plot').src = "";
         document.getElementById('progress_rate_plot').src = "";
         document.getElementById('rates').style.display = "none";
+        return false;
     }
 
-    function plot() {
+    function plot(evt) {
+        evt.preventDefault();
         if (session_id === "NONE") {
             alert("Must upload xml file first!");
             return;
@@ -339,9 +354,10 @@
         getPlots(t_low, t_high, plot_mode);
     }
 
-    document.getElementById("plot_reaction_rate").addEventListener('click', show_temp_range_for_reaction_rate);
-    document.getElementById("plot_progress_rate").addEventListener('click', show_temp_range_for_progress_rate);
-    document.getElementById("plot_confirm").addEventListener('click', plot);
+    document.getElementById('get_rates').addEventListener('click', getRates, false);
+    document.getElementById("plot_reaction_rate").addEventListener('click', show_temp_range_for_reaction_rate, false);
+    document.getElementById("plot_progress_rate").addEventListener('click', show_temp_range_for_progress_rate, false);
+    document.getElementById("plot_confirm").addEventListener('click', plot, false);
 
 
 </script>
