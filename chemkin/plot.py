@@ -149,8 +149,8 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     plt.savefig(figfile, format='png')
     figfile.seek(0)  # rewind to beginning of file
     figdata_png = base64.b64encode(figfile.getvalue())
-    png_str = figdata_png.decode('utf8')
-    return png_str
+    encoded_png = figdata_png.decode('utf8')
+    return encoded_png
 
 
 def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, reaction_rates_current, species, pic_width,
@@ -223,5 +223,5 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     plt.savefig(figfile, format='png')
     figfile.seek(0)  # rewind to beginning of file
     figdata_png = base64.b64encode(figfile.getvalue())
-    png_str = figdata_png.decode('utf8')
-    return png_str
+    encoded_png = figdata_png.decode('utf8')
+    return encoded_png
