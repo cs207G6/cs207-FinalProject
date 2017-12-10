@@ -21,7 +21,7 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
     reaction_data = user_data
     species = reaction_data.species
     concentration = input_concentration
-    temp_range = list(np.linspace(lower_T,upper_T,num=100))
+    temp_range = list(np.linspace(lower_T, upper_T, num=100))
     progress_rates_list = [None] * len(temp_range)
     reaction_rates_list = [None] * len(temp_range)
 
@@ -30,10 +30,14 @@ def range_data_collection(user_data, input_concentration, lower_T, upper_T, curr
         progress_rates_list[i] = progress_rates
         reaction_rates_list[i] = reaction_data.get_reaction_rate(progress_rates)
     # print(len(temp_range),len(progress_rates_list))
-    return temp_range, progress_rates_list, reaction_rates_list, current_T, species
+
+    progress_rates_current = reaction_data.get_progress_rate(concentration, current_T)
+    reaction_rates_current = reaction_data.get_reaction_rate(progress_rates_current)
+    return temp_range, progress_rates_list, reaction_rates_list, current_T, species, progress_rates_current, reaction_rates_current
 
 
-def progress_rate_plot_generation(T_range, progress_rate_range, current_T, pic_width, pic_length):
+def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progress_rates_current, pic_width,
+                                  pic_length):
     """
     T_range: range of temperature indicated by user/as default
     progress_rate_range: calculated from range_data_collection function
@@ -58,12 +62,11 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, pic_w
         y = [e[i] for e in progress_rate_range]
         plt.plot(x, y)
         plt.scatter(x, y, label='Elementary Reaction ' + str(i + 1))
-        plt.plot(curr_T, y[currT_index], 'or')
+        plt.plot(curr_T, progress_rates_current[i], 'or',label='Current Temperature')
     plt.xlabel("Temperature")
     plt.ylabel("Progress Rate")
     plt.title("Progress Rate vs Temperature by Reactions")
     plt.legend()
-    plt.show()
 
     # output plot in base64 format
     figfile = BytesIO()
@@ -73,7 +76,8 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, pic_w
     return figdata_png.decode('utf8')
 
 
-def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, species, pic_width, pic_length):
+def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, reaction_rates_current, species, pic_width,
+                                  pic_length):
     """
     T_range: range of temperature indicated by user/as default
     reaction_rate_range: calculated from range_data_collection function
@@ -98,12 +102,11 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, speci
         y = [e[i] for e in reaction_rate_range]
         plt.plot(x, y, label=None)
         plt.scatter(x, y, label=species[i])
-        plt.plot(curr_T, y[currT_index], 'or')
+        plt.plot(curr_T, reaction_rates_current[i], 'or',label='Current Temperature')
     plt.xlabel("Temperature")
     plt.ylabel("Reaction Rate")
     plt.title("Reaction Rate vs Temperature by Species")
     plt.legend()
-    plt.show()
 
     # output plot in base64 format
     figfile = BytesIO()

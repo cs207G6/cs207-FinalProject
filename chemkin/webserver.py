@@ -6,8 +6,11 @@ from flask import Flask, request, send_from_directory
 from flask.ext.jsonpify import jsonify
 from flask_restful import Resource, Api
 
+import base64
+
 import chemkin.nasa
 import chemkin.parser
+from chemkin.time_evo import TimeEvo
 from . import webserver as ws
 
 import chemkin.plot
@@ -74,6 +77,9 @@ class Plots(Resource):
         reaction_data = data_parser.parse_file(os.path.join(folder, "data.xml"), nasa)
 
         try:
+            tlow = float(tlow)
+            thigh = float(thigh)
+
             conc = [0] * len(reaction_data.species)
 
             for i, sp in enumerate(reaction_data.species):
@@ -81,27 +87,55 @@ class Plots(Resource):
 
             T = float(request.json['_temp'])
 
-            T_range, progress_rate_range, reaction_rate_range, current_T, species = chemkin.plot.range_data_collection(
+            T_range, progress_rate_range, reaction_rate_range, current_T, species, pc, rc = chemkin.plot.range_data_collection(
                 reaction_data, conc, tlow, thigh, T)
 
-            pic_width = 600 / 75
-            pic_length = 400 / 75
+            pic_width = 1200 // 75
+            pic_length = 800 // 75
 
-            progress_plot = chemkin.plot.progress_rate_plot_generation(T_range, progress_rate_range, current_T,
-                                                                       pic_width,
-                                                                       pic_length)
-            reaction_plot = chemkin.plot.reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, species,
+            progress_plot = chemkin.plot.progress_rate_plot_generation(T_range, progress_rate_range, current_T, pc,
                                                                        pic_width,
                                                                        pic_length)
 
-            result = {
+            reaction_plot = chemkin.plot.reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, rc,
+                                                                       species,
+                                                                       pic_width,
+                                                                       pic_length)
+
+            return {
                 "status": "success",
-                'progress_rates': progress_plot,
-                'reaction_rates': reaction_plot
+                'progress_rates': reaction_plot,
+                'reaction_rates': progress_plot
             }
-            return jsonify(result)
         except Exception as e:
             return {'status': 'failed', 'reason': 'Failed to get plots ({})'.format(str(e))}
+
+
+class TempEvoSession(Resource):
+    def post(self):
+        sid = str(uuid.uuid1())
+        data = request.json['data']
+        data_decoded = base64.b64decode(data[13:])
+        folder = "/tmp/chemkin/webserver/{}".format(sid)
+        os.makedirs(folder, exist_ok=True)
+        with open(os.path.join(folder, "data.h5"), "wb") as f:
+            f.write(data_decoded)
+        try:
+            timeevo = TimeEvo(os.path.join(folder, "data.h5"))
+            return {'status': 'success', 'id': sid, 'scenarios': timeevo.scenarios}
+        except Exception as e:
+            return {'status': 'failed', 'reason': 'Failed to load given hdf5 file ({})'.format(str(e))}
+
+
+class TempEvoPlot(Resource):
+    def get(self, sid, scenario):
+        folder = "/tmp/chemkin/webserver/{}".format(sid)
+        try:
+            timeevo = TimeEvo(os.path.join(folder, "data.h5"))
+            result = timeevo.plot(scenario)
+            return {'status': 'success', 'plot': result}
+        except Exception as e:
+            return {'status': 'failed', 'reason': 'Failed to plot given hdf5 file ({})'.format(str(e))}
 
 
 class WebServer:
@@ -112,6 +146,8 @@ class WebServer:
         self.api.add_resource(Session, '/session')
         self.api.add_resource(Rates, '/rates/<sid>')
         self.api.add_resource(Plots, '/plots/<sid>/<tlow>/<thigh>')
+        self.api.add_resource(TempEvoSession, '/timeevosession')
+        self.api.add_resource(TempEvoPlot, '/timeevo/<sid>/<scenario>')
         path = os.path.dirname(ws.__file__)
         self.web_folder = os.path.join(path, "web")
 
