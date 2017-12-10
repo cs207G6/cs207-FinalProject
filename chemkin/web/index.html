@@ -15,6 +15,28 @@
 </head>
 <body>
 <div id="bck"></div>
+<div id="top" class="hide-sm">
+    <div id="top-brand">
+        <a href="/">CS207 Project</a>
+    </div>
+    <nav id="top-nav-main"><ul>
+        <li><a href="time_evolution.html">Time Evolution</a></li>
+        <li >
+            <div>
+                <label class="navbtn">
+                    <input id = "xml_upload" type="file" required/>
+                    <span>Upload .xml</span>
+                </label>
+            </div>
+        </li>
+        </ul>
+    </nav>
+    <nav id="top-nav-extra">
+        <ul>
+            <li><a href="/documentation/">Documentation</a></li>
+        </ul>
+    </nav>
+</div>    
 <div id="title">
     <h1 class="title">Chemkin & Some Title</h1>
     <p>This project is for CS207 put a description here!</p>
@@ -70,12 +92,10 @@
             <label for="_temp">Temperature</label>
             <input id="_temp" value="1000">
         </div>
+        <button class="button" id="plot_reaction_rate">Plot Reaction Rate</button>
+        <button class="button outline" id="plot_progress_rate">Plot Progress Rate</button>
+        <button class="button" id="get_rates">Get Rates</button>
     </form>
-    <button class="button" id="plot_reaction_rate">Plot Reaction Rate</button>
-    <button class="button outline" id="plot_progress_rate">Plot Progress Rate</button>
-    <button class="button" id="get_rates">Get Rates</button>
-
-
     <div id="rates" style="display: none">
         <h2>Progress Rates</h2>
         <p id="progress_rates"></p>

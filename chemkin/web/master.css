@@ -50,17 +50,25 @@ body {
 .form-item label{
     font-weight: bold; 
 }
+
 #post_upload {
     text-align: center;
     margin-bottom: 5%;
     display: none;
 }
+
 form {
     margin: auto;
     max-width: 740px;
     position: relative;
     text-align: left;
     margin-bottom: 2%;
+}
+#plot_reaction_rate {
+    margin-left: 15%; 
+}
+form button {
+    margin-right: 2%;
 }
 
 #bck {
@@ -87,6 +95,10 @@ h1 {
 
 #title {
     margin-top: 15%;
+    margin-bottom: 2%;
+    text-align: center;
+}
+.title {
     margin-bottom: 2%;
     text-align: center;
 }
@@ -117,7 +129,6 @@ label.filebtn input[type="file"] {
     text-align: center;  
 }
 .filebtn {
-   
     font-size: 17px;
     min-height: 48px;
     padding: 13px 24px;
@@ -126,9 +137,6 @@ label.filebtn input[type="file"] {
     font-size: 15px;
     color: #fff;
     background-color: #1c86f2;
-    border-radius: 3px;
-    min-height: 40px;
-    padding: 8px 20px;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
@@ -136,4 +144,20 @@ label.filebtn input[type="file"] {
     line-height: 20px;
     border: 1px solid transparent;
     vertical-align: middle;
+}
+
+.navbtn {
+    font-size: 16px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    color: #2d80ec;
+    text-decoration: none;
+    margin-bottom: 0px;
+}
+
+label.navbtn input[type="file"] {
+    position: fixed;
+    top: -1000px;
 }

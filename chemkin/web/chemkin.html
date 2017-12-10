@@ -21,8 +21,13 @@
         </div>
         <nav id="top-nav-main"><ul>
 			<li><a href="time_evolution.html">Time Evolution</a></li>
-			<li style = "display: none;">
-                <a href="/documentation/">Documentation</a>
+			<li >
+                <div>
+                    <label class="navbtn">
+                        <input id = "xml_upload" type="file" required/>
+                        <span>Upload .xml</span>
+                    </label>
+                </div>
             </li>
             </ul>
         </nav>
@@ -89,10 +94,11 @@
             <label>Temperature</label>
             <input type="text">
         </div>
+            <button class="button" id = "plot_reaction_rate">Plot Reaction Rate</button>
+            <button class="button outline">Plot Progress Rate</button>
+            <button class="button">Get Rates</button>
     </form>
-    <button class="button">Plot Reaction Rate</button>
-    <button class="button outline">Plot Progress Rate</button>
-    <button class="button">Get Rates</button>
+    
 </div>
 
 
