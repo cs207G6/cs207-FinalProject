@@ -1,4 +1,5 @@
 import os
+import traceback
 import uuid
 
 import numpy as np
@@ -108,6 +109,8 @@ class Plots(Resource):
                 'reaction_rates': reaction_plot
             }
         except Exception as e:
+            traceback.print_exc()
+            print(e)
             return {'status': 'failed', 'reason': 'Failed to get plots ({})'.format(str(e))}
 
 

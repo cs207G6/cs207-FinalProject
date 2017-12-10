@@ -47,7 +47,7 @@ def progress_rate_plot_generation(T_range, progress_rate_range, current_T, progr
     curr_T = current_T
 
     # generate colors for the scatterplot
-    currT_index = x.index(curr_T)
+    # currT_index = x.index(curr_T)
     # colors = ['blue' for i in range(currT_index)]
     # colors.append('red')
     # colors.extend(['blue' for i in range(currT_index+1,len(x))])
@@ -87,7 +87,7 @@ def reaction_rate_plot_generation(T_range, reaction_rate_range, current_T, react
     curr_T = current_T
 
     # generate colors for the scatterplot
-    currT_index = x.index(curr_T)
+    # currT_index = x.index(curr_T)
     # colors = ['blue' for i in range(currT_index)]
     # colors.append('red')
     # colors.extend(['blue' for i in range(currT_index+1,len(x))])
