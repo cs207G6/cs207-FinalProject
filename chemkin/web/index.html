@@ -149,6 +149,7 @@
                     }
                     session_id = response['id'];
                     species = response['species'];
+                    equations = response['equations'];
                     showSpecies();
                 }
                 else {
@@ -240,6 +241,7 @@
                 var progress_rates_result = "";
                 for (var i in response['progress_rates']) {
                     progress_rates_result += "Reaction " + i.toString() + ": " + response['progress_rates'][i] + "\n";
+                    progress_rates_result += equations[i] + "\n\n";
                 }
 
                 var reaction_rates_result = "";
