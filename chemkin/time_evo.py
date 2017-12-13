@@ -48,6 +48,8 @@ class TimeEvo:
         time = self.file[scenario + '/time']
         plt.figure(figsize=(pic_width, pic_length))
         plt.plot(time.value, data.value[:, -1], label="Temperature")
+        plt.xlabel("Time")
+        plt.ylabel("Temp")
         plt.title("Temperature Evolution")
         plt.legend()
         figfile = BytesIO()
