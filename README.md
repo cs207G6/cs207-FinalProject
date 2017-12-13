@@ -5,8 +5,8 @@
 # Group 6
 ## Documentation Link: https://github.com/cs207G6/cs207-FinalProject/blob/master/documentation/cs207-model-doc.pdf
 ## Installation steps:
-- Clone the repository: *git clone https://github.com/cs207G6/cs207-FinalProject.git* to your desired directory.
+- Clone the repository: **git clone https://github.com/cs207G6/cs207-FinalProject.git** to your desired directory.
 - Change working directory to the root directory of the cloned repository
-- Install using *pip install .* or *python setup.py install*
-- If desired, run tests using *python setup.py test*
-- To start the web UI, type: python -c "import chemkin.webserver; chemkin.webserver.WebServer(8080).start()". Copy the link *http://127.0.0.1:8080/* to your web browser.
+- Install using **pip install .** or **python setup.py install**
+- If desired, run tests using **python setup.py test**
+- To start the web UI, type: **python -c "import chemkin.webserver; chemkin.webserver.WebServer(8080).start()"**. Copy the link **http://127.0.0.1:8080/** to your web browser.
