@@ -5,7 +5,7 @@
 # CS207 Group 6
 ## Overview: 
 - The **chemkin** library aims to help solve chemical kinetics problems, such as calculating progress rates and reaction rates.
-- We also provide UI and Web API options to generate plots and return calculation results. To access these features, simply follow the instructions below.
+- We also provide **UI** and **Web API** options to generate plots and return calculation results. To access these features, simply follow the instructions below.
 
 ## Documentation Link: 
 - https://github.com/cs207G6/cs207-FinalProject/blob/master/documentation/cs207-model-doc.pdf
